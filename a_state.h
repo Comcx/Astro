@@ -1,7 +1,7 @@
 
 
 #include "astro.h"
-
+#include "a_object.h"
 
 
 
@@ -22,6 +22,16 @@ typedef struct Table_String {
 typedef void (*as_alloc)(void *ptr, size_t size_object, size_t size_new);
 
 
+typedef struct global_State {
+
+    Table_String strt;  /*string table*/
+    as_alloc fn_alloc;
+
+
+}global_State;
+
+                                           
+
 typedef struct as_State {
 
     int size_stack;
@@ -32,17 +42,7 @@ typedef struct as_State {
 }as_State;
 
 
-#define G(S) ((S)->G)
-
-
-
-typedef struct global_State {
-
-    Table_String strt;  /*string table*/
-    as_alloc fn_alloc;
-
-
-}global_State;
+#define G(S) (S->G)
 
 
 
@@ -54,8 +54,7 @@ typedef struct global_State {
 
 
 
-
-
+as_State *asE_newState(void);
 
 
 
