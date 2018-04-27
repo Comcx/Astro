@@ -13,11 +13,12 @@
 
 
 
-void *as_malloc(as_State *S, size_t size);
-void *as_realloc(as_State *S, void *ptr, size_t size_new);
-void as_free(as_State *S, void *ptr);
+void *asM_malloc(as_State *S, size_t size);
+void *asM_realloc(as_State *S, void *ptr, size_t size_new);
+void asM_free(as_State *S, void *ptr);
 
-void *as_newVector(as_State *S, size_t size, );
+#define asM_newVector(S, size, t) \
+    cast(t *, asM_malloc(S, size))
 
 
 
