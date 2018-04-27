@@ -45,14 +45,15 @@ typedef struct as_State as_State;
 
 #define AS_TNIL         0           //nil
 #define AS_TBOOLEAN     1           //bool
-#define AS_TNUMBER      2           //number
-#define AS_TSTRING      3           //string
-#define AS_TTABLE       4           //table
-#define AS_TFUNCTION    5           //function
-#define AS_TUSERDATA    6           //userdata
-#define AS_TTHREAD      7           //thread
+#define AS_UNDEF        2           //undef
+#define AS_TNUMBER      3           //number
+#define AS_TSTRING      4           //string
+#define AS_TTABLE       5           //table
+#define AS_TFUNCTION    6           //function
+#define AS_TUSERDATA    7           //userdata
+#define AS_TTHREAD      8           //thread
 
-#define AS_NUMTAGS     8
+#define AS_NUMTAGS      9
 
 
 
