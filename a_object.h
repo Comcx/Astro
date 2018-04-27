@@ -1,12 +1,12 @@
 
 #include "astro.h"
 
-
+#include <stddef.h>
 
 
 typedef union GCObject GCObject;
 
-#define GCHeader GCObject *next; as_Byte t; as_Byte marked
+#define GCHeader GCObject *next; as_Byte type; as_Byte marked
 
 
 
