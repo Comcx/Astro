@@ -8,6 +8,10 @@
 #include "a_state.h"
 
 
+as_String *asS_newString(as_State *S, char *str);
+
+
+
 
 
 

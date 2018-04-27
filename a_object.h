@@ -125,7 +125,7 @@ typedef struct as_Table {
 ** Astro String Object
  */
 
-typedef union as_String {
+typedef struct as_String {
 
     //align?
     struct {
@@ -133,6 +133,7 @@ typedef union as_String {
         GCHeader;
         as_Byte reservrd;
         unsigned int hash;
+        struct as_String *hnext;
         size_t len;
 
     }header;
