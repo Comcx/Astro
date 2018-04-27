@@ -1,4 +1,11 @@
 
+
+#ifndef A_OBJECT_H
+#define A_OBJECT_H
+
+
+
+
 #include "astro.h"
 
 #include <stddef.h>
@@ -199,7 +206,7 @@ union GCObject {
 
 
 
-
+#endif
 
 
 

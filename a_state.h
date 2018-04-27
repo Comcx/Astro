@@ -1,8 +1,13 @@
 
 
+#ifndef A_STATE_H
+#define A_STATE_H
+
+
+
 #include "astro.h"
 #include "a_object.h"
-
+#include "a_mem.h"
 
 
 typedef struct Table_String {
@@ -19,7 +24,7 @@ typedef struct Table_String {
 
 
 
-typedef void (*as_alloc)(void *ptr, size_t size_object, size_t size_new);
+typedef void *(*as_alloc)(void *ptr, size_t size_object, size_t size_new);
 
 
 typedef struct global_State {
@@ -59,7 +64,7 @@ as_State *asE_newState(void);
 
 
 
-
+#endif
 
 
 

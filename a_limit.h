@@ -1,5 +1,9 @@
 
 
+
+#ifndef A_LIMIT_H
+#define A_LIMIT_H
+
 #include <limits.h>
 #include <stddef.h>
 
@@ -14,7 +18,7 @@
 
 
 
-
+#endif
 
 
 

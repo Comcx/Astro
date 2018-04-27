@@ -5,6 +5,10 @@
 
 
 
+
+
+
+
 void asE_initState(as_State *S) {
 
     S->size_stack = 1;
