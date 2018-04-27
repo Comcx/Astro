@@ -47,7 +47,7 @@ typedef struct as_State {
 }as_State;
 
 
-#define G(S) (S->G)
+#define G(S) ((S)->G)
 
 
 
