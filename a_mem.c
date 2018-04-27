@@ -4,11 +4,11 @@
 
 
 
-void *asM_alloc(void *ptr, size_t size_object, size_t size_new) {
+void *asM_alloc(void *ptr, size_t size_object, size_t size_new, size_t num) {
 
     if (size_object != 0) {
         
-        ptr = malloc(size_object + size_new);
+        ptr = calloc(num, size_object + size_new);
         return ptr;
 
     } else {

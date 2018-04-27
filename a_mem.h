@@ -16,14 +16,14 @@
 #include "a_state.h"
 
 
-void *asM_alloc(void *ptr, size_t size_object, size_t size_new);
+void *asM_alloc(void *ptr, size_t size_object, size_t size_new, size_t num);
 
-void *asM_malloc(as_State *S, size_t size);
-void *asM_realloc(as_State *S, void *ptr, size_t size_new);
-void asM_free(as_State *S, void *ptr);
+#define asM_malloc(S, size) ((S)->G->fn_alloc(NULL, size, 0, 1))
+#define asM_realloc(S, ptr, size_object, size_new) ((S)->G->fn_alloc(ptr, size_object, size_new, 0))
+#define asM_free(S, ptr) ((S)->G->fn_alloc(ptr, 0, 0, 0))
 
-#define asM_newVector(S, size, t) \
-    cast(t *, asM_malloc(S, size))
+#define asM_newVector(S, num, t) \
+    cast(t *, ((S)->G->fn_alloc(NULL, sizeof(t), 0, num)))
 
 
 

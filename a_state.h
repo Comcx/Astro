@@ -24,7 +24,7 @@ typedef struct Table_String {
 
 
 
-typedef void *(*as_alloc)(void *ptr, size_t size_object, size_t size_new);
+typedef void *(*as_alloc)(void *ptr, size_t size_object, size_t size_new, size_t num);
 
 
 typedef struct global_State {
@@ -60,7 +60,7 @@ typedef struct as_State {
 
 
 as_State *asE_newState(void);
-
+void asE_closeState(as_State *S);
 
 
 
