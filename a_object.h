@@ -84,14 +84,14 @@ typedef struct as_Key {
     as_Value val;
     struct as_Node *next;
 
-}Key;
+}as_Key;
 
 typedef struct as_Node {
 
     as_Value val;
     as_Key key;
 
-}Node;
+}as_Node;
 
 typedef struct as_Table {
 
