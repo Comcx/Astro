@@ -63,7 +63,7 @@
 
 #define AS_INT_INT 0
 #define AS_INT_LONG 1
-#define AS_INT LONGLONG 3
+#define AS_INT_LONGLONG 3
 
 #define AS_FLOAT_FLOAT 0
 #define AS_FLOAT_DOUBLE 1
