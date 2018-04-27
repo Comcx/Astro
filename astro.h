@@ -10,7 +10,7 @@
 
 
 #include "a_conf.h"
-
+#include <stddef.h>
 
 
 #define AS_VERSION_MAJOR "0"
@@ -64,9 +64,11 @@ typedef AS_INTEGER  as_Integer;
 typedef AS_UNSIGNED as_Unsigned;
 typedef AS_BYTE     as_Byte;
 
+/*
+** Cast tools
+ */
 
-
-
+#define cast(t, o) ((t)(o))
 
 
 

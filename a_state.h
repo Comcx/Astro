@@ -8,6 +8,7 @@
 typedef struct Table_String {
 
     as_String **hash;
+    int num_use;
     int size;
 
 }Table_String;
