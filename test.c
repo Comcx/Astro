@@ -5,6 +5,7 @@
 #include "astro.h"
 #include "a_mem.h"
 #include "a_state.h"
+#include "a_string.h"
 
 struct Test {
 
@@ -40,12 +41,16 @@ int main(int argc, char *argv[]) {
     //test->a = 7;
 
     //printf("%d\n", test->a);
-
+    
+    /*
     int *arr = asM_newVector(S, 3, int);
     arr[2] = 2;
     arr = asM_free(S, arr);
     printf("\n\n%d", arr[2]);
+    */
 
+    as_String *s = asS_newString(S, "hi");
+    debug_String(S, s);
 
 
     return 0;

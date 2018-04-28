@@ -14,7 +14,7 @@ as_String *asS_newString(as_State *S, char *str);
 
 
 
-
+void debug_String(as_State *S, as_String *str);
 
 
 

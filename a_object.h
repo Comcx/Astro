@@ -128,15 +128,15 @@ typedef struct as_Table {
 typedef struct as_String {
 
     //align?
-    struct {
+    //struct {
 
         GCHeader;
-        as_Byte reservrd;
+        as_Byte reserved;
         unsigned int hash;
         struct as_String *hnext;
         size_t len;
 
-    }header;
+    //}header;
 
     as_Table str;    
 
