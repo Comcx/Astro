@@ -52,6 +52,9 @@ int main(int argc, char *argv[]) {
     as_String *s = asS_newString(S, "hi");
     debug_String(S, s);
 
+    s = asS_freeString(S, s);
+    
+    //debug_str(S);
 
     return 0;
 }

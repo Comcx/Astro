@@ -8,8 +8,10 @@
 #include "a_state.h"
 
 
-as_String *asS_newString(as_State *S, char *str);
+unsigned int asS_hash(as_State *S, char *str);
 
+as_String *asS_newString(as_State *S, char *str);
+as_String *asS_freeString(as_State *S, as_String *str);
 
 
 

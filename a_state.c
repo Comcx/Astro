@@ -2,7 +2,7 @@
 
 #include "a_state.h"
 #include "a_mem.h"
-
+#include <stdio.h>
 
 
 
@@ -17,6 +17,13 @@ void asE_initState(as_State *S) {
     G(S) = asM_alloc(G(S), sizeof(global_State), 0, 1);
     G(S)->fn_alloc = asM_alloc;
     G(S)->strt.hash = asM_newVector(S, 26, as_String*);
+
+    int i = 0;
+    for (; i < 26;i++) {
+
+        G(S)->strt.hash[i] = NULL;
+    }
+    //G(S)->strt.hash[0]->hnext = NULL;
     G(S)->strt.size = 26;
 
 
@@ -52,11 +59,12 @@ void debug_str(as_State *S) {
     int i = 0;
     for (; i < strt.size; i++) {
         
+        printf("%d: ", i);
         as_String *node = strt.hash[i];
         as_String *p = node->hnext;
         while (p) {
 
-            printf("%d", p->hash);
+            printf("%d ", p->hash);
             p = p->hnext;
         }
         printf("\n");
