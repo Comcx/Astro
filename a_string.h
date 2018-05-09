@@ -7,7 +7,7 @@
 #include "a_object.h"
 #include "a_state.h"
 
-
+unsigned int ELFhash(char *str);
 unsigned int asS_hash(as_State *S, char *str);
 
 as_String *asS_newString(as_State *S, char *str);

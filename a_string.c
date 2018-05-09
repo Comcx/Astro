@@ -6,13 +6,30 @@
 #include <stdio.h>
 
 
+unsigned int ELFhash(char *str) {
+
+    unsigned int hash = 0;
+    unsigned int x = 0;
+    while (*str) {
+
+        hash = (hash << 4) + *str;
+        if (x = hash & 0xf0000000 != 0) {
+
+            hash ^= (x >> 24);
+            hash &= ~x;
+        }
+        str++;
+    }
+    
+    return (hash & 0x7fffffff);
+}
+
 
 unsigned int asS_hash(as_State *S, char *str) {
 
-    unsigned int hash;
-    hash = str[0] % 26;
-    
-    return hash;
+    printf(">>>%d\n", ELFhash(str));
+    return ELFhash(str) % 26;
+
 }
 
 
@@ -50,10 +67,10 @@ as_String *asS_newString(as_State *S, char *str) {
     /*not found*/
     as_String *ans = (as_String*)asM_malloc(S, sizeof(as_String));
     ans->hnext = node;
-    node = ans;
+    strt->hash[hash] = ans;
     
     ans->reserved = 0;
-    ans->hash = str[0] % 26;
+    ans->hash = hash;
     //ans->hnext = NULL;
     ans->len = 2;
     

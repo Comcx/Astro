@@ -104,16 +104,16 @@ typedef struct as_Table {
 
     GCHeader;
 
-    int flag_array;
-    int flag_dict;
-    int flag_string;
+    int flag_array; /*used as array?*/
+    int flag_dict;  /*used as dictionary*/
+    int flag_string;/*used as pure string?*/
 
-    as_Value *array;
-    as_Node *node;
+    as_Value *array;/*array ptr*/
+    as_Node *node;  /*dict ptr*/
 
     GCObject *gclist;
-    as_Unsigned size_array;
-    as_Unsigned size_Node;
+    as_Unsigned size_array; /*array size*/
+    as_Unsigned size_Node;  /*dict key size*/
 
 }as_Table;
                                

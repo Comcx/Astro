@@ -1,0 +1,31 @@
+
+#include <assert.h>
+
+
+#define as_assert(x) assert(x)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

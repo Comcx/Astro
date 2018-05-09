@@ -6,6 +6,7 @@
 #include "a_mem.h"
 #include "a_state.h"
 #include "a_string.h"
+#include <assert.h>
 
 struct Test {
 
@@ -49,12 +50,21 @@ int main(int argc, char *argv[]) {
     printf("\n\n%d", arr[2]);
     */
 
-    as_String *s = asS_newString(S, "hi");
+    as_String *s = asS_newString(S, "sfdgfd");
     debug_String(S, s);
 
-    s = asS_freeString(S, s);
+    printf("\n");
+    as_String *ss = asS_newString(S, "qwret");
+    debug_String(S, ss);
+
+    printf("\n");
+    as_String *sss = asS_newString(S, "qwret");
+    debug_String(S, sss);
+
+    //s = asS_freeString(S, s);
     
-    //debug_str(S);
+    debug_strt(S);
+    //assert(0);
 
     return 0;
 }

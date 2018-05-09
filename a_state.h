@@ -19,7 +19,7 @@ typedef struct Table_String {
 }Table_String;
 
 
-void debug_str(as_State *S);
+void debug_strt(as_State *S);
 
 
 

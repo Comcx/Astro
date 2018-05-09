@@ -50,18 +50,18 @@ void asE_closeState(as_State *S) {
 
 
 
-void debug_str(as_State *S) {
+void debug_strt(as_State *S) {
 
     if (S == NULL)  return;
 
-    Table_String strt = G(S)->strt;
+    Table_String *strt = &(G(S)->strt);
 
     int i = 0;
-    for (; i < strt.size; i++) {
+    for (; i < strt->size; i++) {
         
-        printf("%d: ", i);
-        as_String *node = strt.hash[i];
-        as_String *p = node->hnext;
+        printf("%d: %d\t", i, strt->hash[i]);
+        as_String *node = strt->hash[i];
+        as_String *p = node;
         while (p) {
 
             printf("%d ", p->hash);
