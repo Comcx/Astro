@@ -17,14 +17,14 @@ void asE_initState(as_State *S) {
     G(S) = asM_alloc(G(S), sizeof(global_State), 0, 1);
     G(S)->fn_alloc = asM_alloc;
     G(S)->strt.hash = asM_newVector(S, 26, as_String*);
+    G(S)->strt.size = 26;
 
     int i = 0;
-    for (; i < 26;i++) {
+    for (; i < G(S)->strt.size; i++) {
 
         G(S)->strt.hash[i] = NULL;
     }
     //G(S)->strt.hash[0]->hnext = NULL;
-    G(S)->strt.size = 26;
 
 
 }

@@ -28,7 +28,7 @@ unsigned int ELFhash(char *str) {
 unsigned int asS_hash(as_State *S, char *str) {
 
     printf(">>>%d\n", ELFhash(str));
-    return ELFhash(str) % 26;
+    return ELFhash(str) % G(S)->strt.size;
 
 }
 
@@ -72,7 +72,7 @@ as_String *asS_newString(as_State *S, char *str) {
     ans->reserved = 0;
     ans->hash = hash;
     //ans->hnext = NULL;
-    ans->len = 2;
+    ans->len = -1;
     
     return ans;
 }
