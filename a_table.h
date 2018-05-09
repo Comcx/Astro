@@ -1,4 +1,7 @@
 
+#ifndef A_TABLE_H
+#define A_TABLE_H
+
 
 #include "a_object.h"
 #include "a_state.h"
@@ -13,7 +16,7 @@ as_Table *asT_newBox(int flag_array, int flag_dict, int size_array, int size_dic
 
 
 
-
+#endif
 
 
 
