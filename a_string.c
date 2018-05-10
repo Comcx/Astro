@@ -66,7 +66,7 @@ as_String *asS_newString(as_State *S, char *str) {
 
 
     /*not found*/
-    as_String *ans = (as_String*)asM_malloc(S, sizeof(as_String));
+    as_String *ans = (as_String*)asM_malloc(S, sizeof(as_String)+strlen(str)+1);
     ans->hnext = node;
     strt->hash[hash] = ans;
     
@@ -74,6 +74,7 @@ as_String *asS_newString(as_State *S, char *str) {
     ans->hash = hash;
     //ans->hnext = NULL;
     ans->len = strlen(str);
+    //getstr(ans) = (char*)asM_malloc(S, strlen(str)+1);
     memcpy(getstr(ans), str, strlen(str)+1);
     
     return ans;
@@ -81,6 +82,8 @@ as_String *asS_newString(as_State *S, char *str) {
 
 
 as_String *asS_freeString(as_State *S, as_String *str) {
+    
+    //asM_free(S, getstr(str));
 
     str = asM_free(S, str);
 
