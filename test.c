@@ -6,6 +6,7 @@
 #include "a_mem.h"
 #include "a_state.h"
 #include "a_string.h"
+#include "a_table.h"
 #include <assert.h>
 
 struct Test {
@@ -59,7 +60,15 @@ int main(int argc, char *argv[]) {
     //s = asS_freeString(S, s);
     
     debug_strt(S);
+    s = asS_freeString(S, s);
+    ss = asS_freeString(S, ss);
+    sss = asS_freeString(S, sss);
     //assert(0);
+
+    as_Table *t = asT_newArray(S, 10);
+    
+
+
 
     return 0;
 }

@@ -115,7 +115,7 @@ typedef struct as_Table {
 
     GCObject *gclist;
     as_Unsigned size_array; /*array size*/
-    as_Unsigned size_Node;  /*dict key size*/
+    as_Unsigned size_dict;  /*dict key size*/
 
 }as_Table;
                                
