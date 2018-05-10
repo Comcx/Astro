@@ -107,7 +107,7 @@ typedef struct as_Table {
     int flag_array; /*used as array?*/
     int flag_dict;  /*used as dictionary*/
     //int flag_string;/*used as pure string?*/
-    int flag_tabel;
+    
 
     as_Value *array;/*array ptr*/
     as_Node *node;  /*dict ptr*/
