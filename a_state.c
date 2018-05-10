@@ -59,12 +59,13 @@ void debug_strt(as_State *S) {
     int i = 0;
     for (; i < strt->size; i++) {
         
-        printf("%d: %d\t", i, strt->hash[i]);
+        printf("%d:\t%d\t", i, strt->hash[i]);
         as_String *node = strt->hash[i];
         as_String *p = node;
         while (p) {
 
-            printf("%d ", p->hash);
+            printf("%d: ", p->hash);
+            printf("%s\t", getstr(p));
             p = p->hnext;
         }
         printf("\n");

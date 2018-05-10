@@ -2,6 +2,7 @@
 
 
 #include "a_string.h"
+#include "a_object.h"
 #include "a_mem.h"
 #include <stdio.h>
 
@@ -37,7 +38,7 @@ unsigned int asS_hash(as_State *S, char *str) {
 int asS_equal(as_String *a, char *str) {
 
 
-    return 0;
+    return strcmp(getstr(a), str) == 0;
 }
 
 
@@ -72,7 +73,8 @@ as_String *asS_newString(as_State *S, char *str) {
     ans->reserved = 0;
     ans->hash = hash;
     //ans->hnext = NULL;
-    ans->len = -1;
+    ans->len = strlen(str);
+    memcpy(getstr(ans), str, strlen(str)+1);
     
     return ans;
 }

@@ -106,11 +106,12 @@ typedef struct as_Table {
 
     int flag_array; /*used as array?*/
     int flag_dict;  /*used as dictionary*/
-    int flag_string;/*used as pure string?*/
+    //int flag_string;/*used as pure string?*/
     int flag_tabel;
 
     as_Value *array;/*array ptr*/
     as_Node *node;  /*dict ptr*/
+    //char *str;      /*string ptr*/
 
     GCObject *gclist;
     as_Unsigned size_array; /*array size*/
@@ -139,9 +140,14 @@ typedef struct as_String {
 
     //}header;
 
-    as_Table str;    
+    //as_Table str;    
 
 }as_String;
+
+
+
+#define getstr(t) ((char*)(t) + sizeof(as_String))
+
 
 
 
