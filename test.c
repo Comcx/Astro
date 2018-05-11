@@ -54,7 +54,7 @@ int main(int argc, char *argv[]) {
     debug_String(S, ss);
 
     printf("\n");
-    as_String *sss = asS_newString(S, "adsjdbvgf");
+    as_String *sss = asS_newString(S, "zbvmznbvsfdgb");
     debug_String(S, sss);
 
     //s = asS_freeString(S, s);
@@ -65,9 +65,15 @@ int main(int argc, char *argv[]) {
     sss = asS_freeString(S, sss);
     //assert(0);
 
+    printf("\nfreed strt:\n");
+    debug_strt(S);
+
     as_Table *t = asT_newArray(S, 10);
     
-
+    as_Value v;
+    v.val.n = 5.0;
+    t->array[0] = v;
+    printf("%lf\n", t->array[0].val.n);
 
 
     return 0;

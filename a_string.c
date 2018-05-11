@@ -28,7 +28,7 @@ unsigned int ELFhash(char *str) {
 
 unsigned int asS_hash(as_State *S, char *str) {
 
-    printf(">>>%d\n", ELFhash(str));
+    //printf(">>>%d\n", ELFhash(str));
     return ELFhash(str) % G(S)->strt.size;
 
 }
@@ -83,7 +83,26 @@ as_String *asS_newString(as_State *S, char *str) {
 
 as_String *asS_freeString(as_State *S, as_String *str) {
     
-    //asM_free(S, getstr(str));
+    unsigned int hash = asS_hash(S, getstr(str));
+    Table_String *strt = &(G(S)->strt);
+    if (strt->hash[hash] == str) {
+
+        strt->hash[hash] = str->hnext;
+    } else {
+
+        as_String *p = strt->hash[hash]->hnext;
+        while (p && p->hnext != str) {
+
+            p = p->hnext;
+        }
+
+        if (p == NULL) {
+            //assert(0);
+        }
+        /*found node before str*/
+        p->hnext = str->hnext;
+
+    }
 
     str = asM_free(S, str);
 
