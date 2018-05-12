@@ -41,12 +41,12 @@
 
 #define BIT_ISCOLLECTABLE (1 << 6)
 #define setCollectable(t) ((t) | BIT_ISCOLLECTABLE)
+#define ctb(t) setCollectable(t)
 
 
 
 
-
-typedef union GCObject GCObject;
+typedef struct GCObject GCObject;
 
 #define GCHeader GCObject *next; as_Byte type; as_Byte marked
 
@@ -78,6 +78,20 @@ typedef struct as_Value {
 #define removeVar(x) ((x) & 0x0F)
 #define getTypeWithVar(o) (getTypeRaw(o) & 0x3F)
 #define getTypeNoVar(o) (removeVar(getTypeRaw(o)))
+
+#define setType(o, t) ((o)->type = (t))
+#define setNumber(o, x) \
+    {as_Value *o_ = (o); getValue(o_).n = x; setType(o_, AS_TNUMBER);}
+#define setBoolean(o, x) \
+    {as_Value *o_ = (o); getValue(o_).b = x; setType(o_, AS_TBOOLEAN);}
+#define setGC(S, o, g) \
+    {as_Value *o_ = o; GCObject *g_ = g; \
+     getValue(o_).gc = g_; setType(o_, ctb(g_->type));}
+#define setString(S, o, s) \
+    {as_Value *o_ = o; as_String *s_ = s; \
+     getValue(o_).gc = cast(GCObject*, s_); setType(o_, AS_TSTRING);}
+
+
 
 
 
@@ -193,12 +207,14 @@ typedef union as_Closure {
 ** Astro GCObject -- objects that use GC System
  */
 
-union GCObject {
+struct GCObject {
 
     GCHeader;
-    as_String s;
-    as_Closure cl;
-    as_Table t;
+    union {
+        as_String s;
+        as_Closure cl;
+        as_Table t;
+    }val;
 
 };
 
@@ -206,7 +222,7 @@ union GCObject {
 
 
 
-
+void printObject(as_Value *v);
 
 
 

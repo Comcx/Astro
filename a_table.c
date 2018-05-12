@@ -6,7 +6,7 @@
 #include "a_debug.h"
 
 
-as_Table *asT_newBox(as_State *S, int flag_array, int flag_dict, int size_array, int size_dict) {
+as_Table *asT_new(as_State *S, int flag_array, int flag_dict, int size_array, int size_dict) {
     
     as_Table *t = (as_Table*)asM_malloc(S, sizeof(as_Table));
 
@@ -34,7 +34,24 @@ as_Table *asT_newBox(as_State *S, int flag_array, int flag_dict, int size_array,
 }
 
 
+void debug_table(as_Table *t) {
 
+    if (t->flag_array && t->flag_dict) {
+    
+        printf("\n-> array part:\n");
+
+
+    } else if (t->flag_array) {
+
+        
+    
+    } else if (t->flag_dict) {
+
+        
+    }
+
+
+}
 
 
 

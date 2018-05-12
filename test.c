@@ -9,71 +9,28 @@
 #include "a_table.h"
 #include <assert.h>
 
-struct Test {
-
-    int a;
-    int b;
-
-};
 
 
 
 int main(int argc, char *argv[]) {
 
     
-    as_Integer i = 5;
-    as_Number n = 6.0;
-
-    
-
     //memcpy(getstr(test), "can you?" ,8);
-
-    //printf("%s", getstr(test));
     
-    //test = asM_alloc((void*)test, 0, 0, 0);
-    
-    //printf("%d\n", test->a);    
     as_State *S = asE_newState();
     //test = asM_malloc(S, sizeof(struct Test));
-    //test->a = 7;
-
-    //printf("%d\n", test->a);
-    
     /*
     int *arr = asM_newVector(S, 3, int);
     arr[2] = 2;
     arr = asM_free(S, arr);
     printf("\n\n%d", arr[2]);
     */
-
-    as_String *s = asS_newString(S, "sfdgfd");
-    debug_String(S, s);
-
-    printf("\n");
-    as_String *ss = asS_newString(S, "qwret");
-    debug_String(S, ss);
-
-    printf("\n");
-    as_String *sss = asS_newString(S, "zbvmznbvsfdgb");
-    debug_String(S, sss);
-
-    //s = asS_freeString(S, s);
     
-    debug_strt(S);
-    s = asS_freeString(S, s);
-    ss = asS_freeString(S, ss);
-    sss = asS_freeString(S, sss);
-    //assert(0);
+    as_String *str = asS_newString(S, "2333");
 
-    printf("\nfreed strt:\n");
-    debug_strt(S);
-
-    as_Table *t = asT_newArray(S, 10);
-    
     as_Value v;
-    v.val.n = 5.0;
-    t->array[0] = v;
-    printf("%lf\n", t->array[0].val.n);
+    setString(S, &v, str);
+    printObject(&v);
 
 
     return 0;

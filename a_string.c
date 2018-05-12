@@ -1,6 +1,6 @@
 
 
-
+#include "astro.h"
 #include "a_string.h"
 #include "a_object.h"
 #include "a_mem.h"
@@ -74,6 +74,7 @@ as_String *asS_newString(as_State *S, char *str) {
     ans->hash = hash;
     //ans->hnext = NULL;
     ans->len = strlen(str);
+    ans->type = AS_TSTRING;
     //getstr(ans) = (char*)asM_malloc(S, strlen(str)+1);
     memcpy(getstr(ans), str, strlen(str)+1);
     

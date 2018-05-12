@@ -19,7 +19,7 @@ void *asM_alloc(void *ptr, size_t size_object, size_t size_new, size_t num) {
             return NULL;
         } else {
 
-            return realloc(ptr, size_object + size_new);    
+            return realloc(ptr, size_new);    
         }
     }
 
