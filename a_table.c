@@ -34,16 +34,34 @@ as_Table *asT_new(as_State *S, int flag_array, int flag_dict, int size_array, in
 }
 
 
-void debug_table(as_Table *t) {
+void debug_Table(as_Table *t) {
 
     if (t->flag_array && t->flag_dict) {
     
         printf("\n-> array part:\n");
+        int i = 0;
+        for (; i < t->size_array; i++) {
+
+            printObject(t->array + i);
+            printf("\n");
+        }
+
+        printf("\n-> dict part:\n");
+        for (i = 0; i < t->size_dict; i++) {
+
+            printf("under working...");
+        }
 
 
     } else if (t->flag_array) {
 
-        
+        printf("\n-> array:\n");
+        int i = 0;
+        for (; i < t->size_array; i++) {
+
+            printObject(t->array + i);
+            printf("\n");
+        }
     
     } else if (t->flag_dict) {
 

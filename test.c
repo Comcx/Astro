@@ -7,7 +7,7 @@
 #include "a_state.h"
 #include "a_string.h"
 #include "a_table.h"
-#include <assert.h>
+#include "a_debug.h"
 
 
 
@@ -30,7 +30,10 @@ int main(int argc, char *argv[]) {
 
     as_Value v;
     setString(S, &v, str);
-    printObject(&v);
+    
+    as_Table *t = asT_newArray(S, 10);
+    t->array[0] = v;
+    debug_Table(t);
 
 
     return 0;
