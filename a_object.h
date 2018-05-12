@@ -82,11 +82,14 @@ typedef struct as_Value {
 #define setType(o, t) ((o)->type = (t))
 #define setNumber(o, x) \
     {as_Value *o_ = (o); getValue(o_).n = x; setType(o_, AS_TNUMBER);}
+
 #define setBoolean(o, x) \
     {as_Value *o_ = (o); getValue(o_).b = x; setType(o_, AS_TBOOLEAN);}
+
 #define setGC(S, o, g) \
     {as_Value *o_ = o; GCObject *g_ = g; \
      getValue(o_).gc = g_; setType(o_, ctb(g_->type));}
+
 #define setString(S, o, s) \
     {as_Value *o_ = o; as_String *s_ = s; \
      getValue(o_).gc = cast(GCObject*, s_); setType(o_, AS_TSTRING);}
@@ -164,6 +167,40 @@ typedef struct as_String {
 
 
 
+/*
+** Astro special objects 
+ */
+
+
+/*local variable*/
+
+typedef struct LocVar{
+
+    as_String *name;
+    int p_start;
+    int p_end;
+
+}LocVar;
+
+
+/*Proto type(function proto info)*/
+
+typedef struct Proto{
+
+    GCHeader;
+    as_Byte num_params;
+    as_Byte size_maxStack;
+    int size_upvals;
+
+    Instruction *code;
+    struct Proto **p;
+
+    GCObject *gclist;
+
+}Proto;
+
+
+
 
 
 /*
@@ -185,8 +222,8 @@ typedef struct as_CClosure {
 typedef struct as_AClosure {
 
     ClosureHeader;
+    Proto *p;
     
-
 
 }as_AClosure;
 
@@ -221,7 +258,7 @@ struct GCObject {
 
 
 
-
+/*Functions for objects*/
 void printObject(as_Value *v);
 
 

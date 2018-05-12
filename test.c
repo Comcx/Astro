@@ -35,6 +35,9 @@ int main(int argc, char *argv[]) {
     t->array[0] = v;
     debug_Table(t);
 
+    asS_freeString(S, str);
+    debug_strt(S);
+
 
     return 0;
 }

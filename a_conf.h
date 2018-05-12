@@ -143,8 +143,10 @@
 #if AS_BITSINT >= 32
 
     #define AS_MAXSTACK 1000000
+    typedef unsigned int Instruction;
 #else
     #define AS_MAXSTACK 15000
+    typedef unsigned long Instruction;
 
 #endif
 
