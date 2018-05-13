@@ -5,7 +5,7 @@
 
 
 #include "a_debug.h"
-
+#include "a_limit.h"
 
 
 
@@ -28,7 +28,7 @@
 ===========================================================================*/
 
 
-typedef enum {iABC, iABx, iAsBx, iAx} OpMode;  /* basic instruction format */
+typedef enum {iABC, iABx, iAsBx, iAx} as_OpMode;  /* basic instruction format */
 
 
 /*
@@ -102,7 +102,7 @@ OP_VARARG//     A B             R(A), ... ,R(A+B-1) = vararg
 
 
 
-} OpCode;
+} as_OpCode;
 
 
 #define getOpCode(instruction) ((instruction) & 0x003f)
@@ -112,6 +112,15 @@ OP_VARARG//     A B             R(A), ... ,R(A+B-1) = vararg
 #define getArg_Ax(instruction) (((instruction) & 0xffffffc0) >> SIZE_OP)
 #define getArg_Bx(instruction) (((instruction) & 0xffffc000) >> (SIZE_OP+SIZE_A))
 #define getArg_sBx(instruction) (((instruction) & 0xffffc000) >> (SIZE_OP+SIZE_A))
+
+
+
+
+
+
+
+
+
 
 
 

@@ -10,7 +10,7 @@
 
 
 #define MAX_SIZE_MEM ((size_t)(~(size_t)0))
-
+#define NUM_OPCODE 38
 
 
 

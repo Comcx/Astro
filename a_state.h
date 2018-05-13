@@ -6,6 +6,7 @@
 
 
 #include "astro.h"
+#include "a_conf.h"
 #include "a_object.h"
 #include "a_mem.h"
 
@@ -38,6 +39,8 @@ typedef struct global_State {
                                            
 
 typedef struct as_State {
+    
+    Instruction *oldPc;
 
     int size_stack;
     global_State *G;
