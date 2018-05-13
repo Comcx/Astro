@@ -6,6 +6,45 @@
 
 #include "a_debug.h"
 
+
+
+
+/*===========================================================================
+  We assume that instructions are unsigned numbers.
+  All instructions have an opcode in the first 6 bits.
+  Instructions can have the following fields:
+  'A' : 8 bits
+  'B' : 9 bits
+  'C' : 9 bits
+  'Ax' : 26 bits ('A', 'B', and 'C' together)
+  'Bx' : 18 bits ('B' and 'C' together)
+  'sBx' : signed Bx
+
+  A signed argument is represented in excess K; that is, the number
+  value is the unsigned value minus K. K is exactly the maximum value
+  for that argument (so that -max is represented by 0, and +max is
+  represented by 2*max), which is half the maximum for the corresponding
+  unsigned argument.
+===========================================================================*/
+
+
+typedef enum {iABC, iABx, iAsBx, iAx} OpMode;  /* basic instruction format */
+
+
+/*
+** size and position of opcode arguments.
+*/
+#define SIZE_C        9
+#define SIZE_B        9
+#define SIZE_Bx       (SIZE_C + SIZE_B)
+#define SIZE_A        8
+#define SIZE_Ax       (SIZE_C + SIZE_B + SIZE_A)
+
+#define SIZE_OP       6
+
+
+
+
 typedef enum {
 
 /*Name          args            description               */
@@ -66,7 +105,7 @@ OP_VARARG//     A B             R(A), ... ,R(A+B-1) = vararg
 } OpCode;
 
 
-
+#define getOpCode(instruction) ((instruction) & 0x003f)
 
 
 

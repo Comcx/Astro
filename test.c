@@ -7,6 +7,7 @@
 #include "a_state.h"
 #include "a_string.h"
 #include "a_table.h"
+#include "a_code.h"
 #include "a_debug.h"
 
 
@@ -36,7 +37,10 @@ int main(int argc, char *argv[]) {
     debug_Table(t);
 
     asS_freeString(S, str);
-    debug_strt(S);
+
+    int order = 0x0001;
+    OpCode code = OP_MOVE;
+    printf("%d", code == getOpCode(order));
 
 
     return 0;
