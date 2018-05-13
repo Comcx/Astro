@@ -38,10 +38,12 @@ int main(int argc, char *argv[]) {
 
     asS_freeString(S, str);
 
-    int order = 0x0001;
+    int order = (4 << 23) | (3 << 14) | (2 << 6) | 1;
+    printf("%x\n", order);
     OpCode code = OP_MOVE;
-    printf("%d", code == getOpCode(order));
-
+    printf("%d\n", code == getOpCode(order));
+    printf("%d\n%d\n%d", getArg_A(order), getArg_B(order), getArg_C(order));
+    
 
     return 0;
 }

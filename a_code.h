@@ -106,11 +106,12 @@ OP_VARARG//     A B             R(A), ... ,R(A+B-1) = vararg
 
 
 #define getOpCode(instruction) ((instruction) & 0x003f)
-
-
-
-
-
+#define getArg_A(instruction) (((instruction) & 0x3fc0) >> SIZE_OP)
+#define getArg_B(instruction) (((instruction) & 0xff800000) >> (SIZE_OP+SIZE_A+SIZE_C))
+#define getArg_C(instruction) (((instruction) & 0x7fc000) >> (SIZE_OP+SIZE_A))
+#define getArg_Ax(instruction) (((instruction) & 0xffffffc0) >> SIZE_OP)
+#define getArg_Bx(instruction) (((instruction) & 0xffffc000) >> (SIZE_OP+SIZE_A))
+#define getArg_sBx(instruction) (((instruction) & 0xffffc000) >> (SIZE_OP+SIZE_A))
 
 
 
