@@ -98,6 +98,9 @@ typedef struct as_Value {
 
 
 
+typedef as_Value* StkId;
+
+
 /*
 ** Astro Table Container
  */
