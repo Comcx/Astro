@@ -188,12 +188,15 @@ typedef struct LocVar{
 typedef struct Proto{
 
     GCHeader;
-    as_Byte num_params;
-    as_Byte size_maxStack;
-    int size_upvals;
+    as_Byte num_params;     /*number of parameters*/
+    as_Byte size_maxStack;  /*max size of stack*/
+    int size_k;             /*size of consts*/
+    int size_upvals;        /*size of upvals*/
 
-    Instruction *code;
-    struct Proto **p;
+    Instruction *code;      /*codes in proto*/
+    struct Proto **p;       /*functions defined in*/
+
+    int info_line;          /*line info for debug*/
 
     GCObject *gclist;
 
