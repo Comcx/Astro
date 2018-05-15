@@ -11,7 +11,7 @@
 void asE_initStack(as_State *S) {
 
     S->stack = asM_newVector(S, MIN_STACK, as_Value);    
-    S->top = NULL;
+    S->top = S->stack;
     S->base = NULL;
 
 }
