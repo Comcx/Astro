@@ -47,6 +47,7 @@ int main(int argc, char *argv[]) {
     int x = OP_LOADK;
     printf("%d\n", x);
 
+    printf("\n%d\n", S->stack);
 
     S = asE_closeState(S);
     return 0;

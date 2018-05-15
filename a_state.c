@@ -10,8 +10,9 @@
 
 void asE_initStack(as_State *S) {
 
-    
-
+    S->stack = asM_newVector(S, MIN_STACK, as_Value);    
+    S->top = NULL;
+    S->base = NULL;
 
 }
 
@@ -34,7 +35,7 @@ void asE_initState(as_State *S) {
     }
     
     /*init Astro stack*/
-
+    asE_initStack(S);
 
 }
 
@@ -52,7 +53,11 @@ as_State *asE_newState(void) {
 
 as_State *asE_closeState(as_State *S) {
 
+    S->stack = asM_free(S, S->stack);
+    
+    G(S)->strt.hash = asM_free(S, G(S)->strt.hash);
     G(S) = asM_free(S, G(S));
+    
     free(S);    /*since we can not free S by S itself, we use raw free function*/
 
     return NULL;
