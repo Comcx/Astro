@@ -90,7 +90,7 @@ typedef struct as_State {
 
 
 as_State *asE_newState(void);
-void asE_closeState(as_State *S);
+as_State *asE_closeState(as_State *S);
 
 
 

@@ -36,7 +36,7 @@ int main(int argc, char *argv[]) {
     t->array[0] = v;
     debug_Table(t);
 
-    asS_freeString(S, str);
+    str = asS_freeString(S, str);
 
     int order = (4 << 23) | (3 << 14) | (2 << 6) | 1;
     printf("%x\n", order);
@@ -47,6 +47,8 @@ int main(int argc, char *argv[]) {
     int x = OP_LOADK;
     printf("%d\n", x);
 
+
+    S = asE_closeState(S);
     return 0;
 }
 
