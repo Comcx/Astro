@@ -37,6 +37,10 @@
 typedef struct as_State as_State;
 
 
+#define MIN_STACK 20
+
+
+
 /*
 ** Astro basic used types
  */

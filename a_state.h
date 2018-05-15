@@ -24,10 +24,29 @@ void debug_strt(as_State *S);
 
 
 
+/*Information about a function call*/
+
+typedef struct CallInfo {
+
+    StkId func;
+    StkId top;
+    struct CallInfo *next, *prev;
+
+    StkId base;
+    
+    int num_result;
+    unsigned short status;
+
+} CallInfo;
+
+
+
+
 
 typedef void *(*as_alloc)(void *ptr, size_t size_object, size_t size_new, size_t num);
 
 
+/*Global state especially for GC*/
 typedef struct global_State {
 
     Table_String strt;  /*string table*/
@@ -37,14 +56,22 @@ typedef struct global_State {
 }global_State;
 
                                            
+/*Main Astro state, used every where*/
 
 typedef struct as_State {
     
     Instruction *oldPc;
+    StkId base;
+    StkId top;
+    StkId stack;
+    
+    CallInfo ci;
+    CallInfo *callList;
 
     int size_stack;
     global_State *G;
 
+    GCObject *gclist;
 
 
 }as_State;

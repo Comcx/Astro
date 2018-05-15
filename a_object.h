@@ -186,6 +186,17 @@ typedef struct LocVar{
 }LocVar;
 
 
+typedef struct UpValDesc {
+
+    as_String *name;
+    as_Byte inStack;
+    as_Byte id;
+
+} UpValDesc;
+
+
+
+
 /*Proto type(function proto info)*/
 
 typedef struct Proto{
@@ -194,10 +205,14 @@ typedef struct Proto{
     as_Byte num_params;     /*number of parameters*/
     as_Byte size_maxStack;  /*max size of stack*/
     int size_k;             /*size of consts*/
-    int size_upvals;        /*size of upvals*/
+    int size_UpVal;         /*size of upvals*/
+    int size_LocVar;        /*size of local vars*/
 
     Instruction *code;      /*codes in proto*/
     struct Proto **p;       /*functions defined in*/
+    as_Value *k;            /*constants used by the function*/
+    LocVar *locVar;         /*local vars*/
+    UpValDesc *upVal;       /*upvalues*/
 
     int info_line;          /*line info for debug*/
 
