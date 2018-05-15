@@ -96,6 +96,10 @@ typedef struct as_Value {
 
 
 
+#define setObj(S, obj1, obj2) \
+    {as_Value *o = (obj1); *o = *(obj2); \
+     (void)S; }
+
 
 
 typedef as_Value* StkId;
