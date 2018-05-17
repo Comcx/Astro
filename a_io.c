@@ -6,6 +6,16 @@
 #include "a_state.h"
 
 
+void asI_init(as_State *S, as_IO *io, as_Reader reader) {
+
+    io->S = S;
+    io->reader = reader;
+    io->n = 0;
+    io->p = NULL;
+
+}
+
+
 int asI_fill(as_IO *io) {
 
     as_State *S = io->S;
@@ -25,7 +35,17 @@ int asI_fill(as_IO *io) {
 }
 
 
+size_t asI_read(as_IO *io, void *b, size_t n) {
 
+    while (n) {
+
+        
+
+
+    }
+
+    return 0;
+}
 
 
 
