@@ -43,14 +43,14 @@ typedef struct CallInfo {
 
 
 
-typedef void *(*as_alloc)(void *ptr, size_t size_object, size_t size_new, size_t num);
+//typedef void *(*as_Alloc)(void *ptr, size_t size_object, size_t size_new, size_t num);
 
 
 /*Global state especially for GC*/
 typedef struct global_State {
 
     Table_String strt;  /*string table*/
-    as_alloc fn_alloc;
+    as_Alloc fn_alloc;
 
 
 }global_State;

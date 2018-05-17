@@ -1,5 +1,5 @@
 
-
+#include "astro.h"
 #include "a_state.h"
 #include "a_mem.h"
 #include <stdio.h>
