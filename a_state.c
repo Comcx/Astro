@@ -18,13 +18,16 @@ void asE_initStack(as_State *S) {
 
 
 
-void asE_initState(as_State *S) {
+as_State *as_newState(as_Alloc f) {
+
+    as_State *S;
+    S = f(S, sizeof(as_State), 0, 1);
 
     S->size_stack = 1;
 
     /*init global_State *g*/
-    G(S) = asM_alloc(G(S), sizeof(global_State), 0, 1);
-    G(S)->fn_alloc = asM_alloc;
+    G(S) = f(G(S), sizeof(global_State), 0, 1);
+    G(S)->fn_alloc = f;
     G(S)->strt.hash = asM_newVector(S, 26, as_String*);
     G(S)->strt.size = 26;
 
@@ -37,17 +40,14 @@ void asE_initState(as_State *S) {
     /*init Astro stack*/
     asE_initStack(S);
 
+
+    return S;
 }
 
                                                              
 as_State *asE_newState(void) {
 
-    as_State *S;
-    S = asM_alloc(S, sizeof(as_State), 0, 1);
-    
-    asE_initState(S);
-
-    return S;
+    return as_newState(asU_alloc);
 }
 
 

@@ -88,7 +88,7 @@ typedef struct as_State {
 
 
 
-
+as_State *as_newState(as_Alloc f);
 as_State *asE_newState(void);
 as_State *asE_closeState(as_State *S);
 
