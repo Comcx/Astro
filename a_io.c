@@ -39,8 +39,18 @@ size_t asI_read(as_IO *io, void *b, size_t n) {
 
     while (n) {
 
-        
+        size_t m;
+        if (io->n == 0) {
 
+            if (asI_fill(io) == EOI)
+                return n;
+            else {
+
+                io->n++;
+                io->p--;
+            }
+        }
+        //m = 
 
     }
 
