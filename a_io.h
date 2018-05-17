@@ -9,6 +9,10 @@
 #include "a_state.h"
 
 
+#define EOI -1
+
+
+
 typedef struct as_IO as_IO;
 
 #define as_getc(I) ( ((I)->n--)>0 ? cast_uchar(*(I)->p++) : asI_fill(I) )

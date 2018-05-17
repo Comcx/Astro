@@ -16,7 +16,7 @@ int asI_fill(as_IO *io) {
 
     if (buffer == NULL || size == 0) {
 
-        return -1;
+        return EOI;
     }
     io->n = size-1;
     io->p = buffer;
