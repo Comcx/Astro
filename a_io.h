@@ -28,16 +28,20 @@ typedef struct as_Buffer {
 
 struct as_IO {
 
-    size_t num_left;
+    size_t n;
     const char *p;
     as_Reader reader;
     void *data;
-    as_State S;
+    as_State *S;
 
 };
 
 
 
+
+void asI_init(as_State *S, as_IO *io, as_Reader reader);
+size_t asI_read(as_IO *io, void *b, size_t n);
+int asI_fill(as_IO *io);
 
 
 

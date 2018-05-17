@@ -75,7 +75,7 @@ typedef AS_BYTE     as_Byte;
 
 
 typedef void *(*as_Alloc)(void *ptr, size_t size_object, size_t size_new, size_t num);
-typedef const char* (*as_Reader)(as_State *S, size_t sz);
+typedef const char* (*as_Reader)(as_State *S, size_t *sz);
 //typedef int (*as_Writer)()
 
 

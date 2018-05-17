@@ -8,6 +8,7 @@
 #include "a_string.h"
 #include "a_table.h"
 #include "a_code.h"
+#include "a_io.h"
 #include "a_debug.h"
 
 
