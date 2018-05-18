@@ -2,6 +2,7 @@
 #include "astro.h"
 #include "a_state.h"
 #include "a_mem.h"
+#include "a_ui.h"
 #include <stdio.h>
 
 

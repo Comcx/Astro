@@ -8,6 +8,7 @@
 #include "a_string.h"
 #include "a_table.h"
 #include "a_code.h"
+#include "a_ui.h"
 #include "a_io.h"
 #include "a_debug.h"
 
@@ -21,12 +22,6 @@ int main(int argc, char *argv[]) {
     
     as_State *S = asE_newState();
     //test = asM_malloc(S, sizeof(struct Test));
-    /*
-    int *arr = asM_newVector(S, 3, int);
-    arr[2] = 2;
-    arr = asM_free(S, arr);
-    printf("\n\n%d", arr[2]);
-    */
     
     as_String *str = asS_newString(S, "2333");
 
@@ -38,7 +33,8 @@ int main(int argc, char *argv[]) {
     debug_Table(t);
 
     str = asS_freeString(S, str);
-
+    
+    /*
     int order = (4 << 23) | (3 << 14) | (2 << 6) | 1;
     printf("%x\n", order);
     as_OpCode code = OP_MOVE;
@@ -46,7 +42,12 @@ int main(int argc, char *argv[]) {
     printf("%d\n%d\n%d\n", getArg_A(order), getArg_B(order), getArg_C(order));
     
     int x = OP_LOADK;
-    printf("%d\n", x);
+    printf("%d\n", x);*/
+
+
+    FileLoader fl;
+
+
 
 
     S = asE_closeState(S);

@@ -3,16 +3,16 @@
 #include "astro.h"
 #include "a_mem.h"
 #include "a_io.h"
-#include "a_ui.h"
+//#include "a_ui.h"
 #include "a_state.h"
 
 
-void asI_init(as_State *S, as_IO *io, as_Reader reader) {
+void asI_init(as_State *S, as_IO *io, as_Reader reader, void *data) {
 
     io->S = S;
     io->reader = reader;
     io->n = 0;
-    io->data = NULL;
+    io->data = data;
     io->p = NULL;
 
 }
@@ -24,7 +24,7 @@ int asI_fill(as_IO *io) {
     const char *buffer;
     size_t size;
 
-    buffer = io->reader(S, &size);
+    buffer = io->reader(S, &size, io->data);
 
     if (buffer == NULL || size == 0) {
 

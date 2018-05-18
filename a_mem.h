@@ -15,7 +15,7 @@
 
 #include "astro.h"
 #include "a_state.h"
-#include "a_ui.h"
+//#include "a_ui.h"
 
 
 //void *asM_alloc(void *ptr, size_t size_object, size_t size_new, size_t num);

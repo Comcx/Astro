@@ -7,10 +7,11 @@
 #include "astro.h"
 #include "a_mem.h"
 #include "a_state.h"
+#include <stdio.h>
 
 
 #define EOI -1
-
+#define SIZE_BUFFER 512
 
 
 typedef struct as_IO as_IO;
@@ -43,7 +44,7 @@ struct as_IO {
 
 
 
-void asI_init(as_State *S, as_IO *io, as_Reader reader);
+void asI_init(as_State *S, as_IO *io, as_Reader reader, void *data);
 size_t asI_read(as_IO *io, void *b, size_t n);
 int asI_fill(as_IO *io);
 
