@@ -11,6 +11,7 @@
 
 
 #include <stdlib.h>
+#include <string.h>
 
 #include "astro.h"
 #include "a_state.h"
