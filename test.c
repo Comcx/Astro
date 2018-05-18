@@ -1,7 +1,4 @@
 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
 #include "astro.h"
 #include "a_mem.h"
 #include "a_state.h"
@@ -44,11 +41,22 @@ int main(int argc, char *argv[]) {
     int x = OP_LOADK;
     printf("%d\n", x);*/
 
+    
+    FILE *file;
+    file = fopen("test.txt", "r");
 
     FileLoader fl;
+    fl.file = file;
+    fl.n = 0;
 
+    //char buff[50];
+    //fread(buff, 1, 5, file);
+    
+    size_t size;
+    const char *buff = asU_read(S, &size, &fl);
+    printf("%s", buff);
 
-
+    fclose(file);
 
     S = asE_closeState(S);
     return 0;
