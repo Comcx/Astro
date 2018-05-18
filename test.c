@@ -7,6 +7,7 @@
 #include "a_code.h"
 #include "a_ui.h"
 #include "a_io.h"
+#include "a_lex.h"
 #include "a_debug.h"
 
 
