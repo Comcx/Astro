@@ -20,7 +20,18 @@ static const char *asX_tokens[] = {
 };
 
 
+void asX_setInput(as_State *S, LexState *ls, as_IO *io, as_String *source, int firstChar) {
 
+    ls->t.token = 0;
+    ls->S = S;
+    ls->current = firstChar;
+
+    ls->io = io;
+    ls->num_line = 1;
+    ls->lastLine = 1;
+    ls->source = source;
+
+}
 
 
 

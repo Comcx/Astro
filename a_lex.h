@@ -9,6 +9,9 @@
 #include "a_io.h"
 
 
+#define FIRST_RESERVED 1
+
+
 typedef enum as_reserved {
 
     /* terminal symbols denoted by reserved words */
@@ -22,7 +25,7 @@ typedef enum as_reserved {
     TK_DBCOLON, TK_EOS,
     TK_FLT, TK_INT, TK_NAME, TK_STRING
 
-};
+} as_reserved;
 
 #define NUM_RESERVED (cast(int, TK_WHILE - FIRST_RESERVED + 1))
 
@@ -68,8 +71,8 @@ typedef struct LexState {
 
 
 
-
-
+void asX_setIput(as_State *S, LexState *ls, as_IO *io, as_String *source, int firstChar);
+void asX_next(as_State *S);
 
 
 
