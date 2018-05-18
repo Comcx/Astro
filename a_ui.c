@@ -22,11 +22,46 @@ void *asU_alloc(void *ptr, size_t size_object, size_t size_new, size_t num) {
             return realloc(ptr, size_new);    
         }
     }
+}
+
+
+
+
+
+
+
+/*
+** Astro default file reading settings, you can change it if needed
+ *
+ */
+
+
+
+
+
+
+const char *asU_read(as_State *S, size_t size) {
+
+    
 
 
 }
 
-                                                                                 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

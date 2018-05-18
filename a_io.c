@@ -12,6 +12,7 @@ void asI_init(as_State *S, as_IO *io, as_Reader reader) {
     io->S = S;
     io->reader = reader;
     io->n = 0;
+    io->data = NULL;
     io->p = NULL;
 
 }
