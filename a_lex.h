@@ -74,7 +74,7 @@ typedef struct LexState {
     Token t_pre;
 
     as_State *S;
-    as_IO io;
+    as_IO *io;
     as_Buffer *buffer;
 
     as_String *source;

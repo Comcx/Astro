@@ -9,7 +9,7 @@
 
 
 #define next(ls) ((ls)->current = as_getc((ls)->io))
-#define save_and_next(ls) (save(la, la->current), next(ls))
+#define save_and_next(ls) (save(ls, ls->current), next(ls))
 
 
 static const char *asX_tokens[] = {
@@ -68,7 +68,7 @@ const char *asX_token2str(LexState *ls, int token) {
 static void incLineNumber(LexState *ls) {
 
     int old = ls->current;
-    as_assert(isNewLine(ls));
+    as_assert(as_isNewLine(ls));
     next(ls);
 
     if (++ls->num_line > INT_MAX) {
@@ -85,7 +85,7 @@ static void incLineNumber(LexState *ls) {
  */
 
 
-static checkNext1(LexState *ls, int c) {
+static int checkNext1(LexState *ls, int c) {
 
     if (ls->current == c) {
 
@@ -96,7 +96,7 @@ static checkNext1(LexState *ls, int c) {
 }
 
 
-static checkNext2(LexState *ls, const char *set) {
+static int checkNext2(LexState *ls, const char *set) {
 
     as_assert(set[2] == '\0');
     if (ls->current == set[0] || ls->current == set[1]) {
