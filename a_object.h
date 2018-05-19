@@ -286,7 +286,7 @@ struct GCObject {
 /*Functions for objects*/
 void printObject(as_Value *v);
 
-
+size_t asO_str2num(const char *str);
 
 
 
