@@ -27,7 +27,12 @@ typedef struct as_Buffer {
 
 } as_Buffer;
 
-
+#define as_initBuffer(S, buff) ((buff)->buffer = NULL, (buff)->size = 0)
+#define as_buffer(buff) ((buff)->buffer)
+#define as_bufferLen(buff) ((buff)->n)
+#define as_bufferSize(buff) ((buff)->size)
+#define as_bufferRemove(buff, i) ((buff)->n -= (i))
+#define as_resetBuffer(buff) ((buff)->n = 0)
 
 
 

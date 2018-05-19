@@ -7,9 +7,23 @@
 #include "a_state.h"
 #include "a_object.h"
 #include "a_io.h"
+#include <ctype.h>
 
 
-#define FIRST_RESERVED 1
+#define as_isNewLine(c) ((c) == '\n' || (c) == '\r')
+
+#define as_isAlpha(c) (isalpha(c) || (c) == '_')
+#define as_isAlnum(c) (isalnum(c) || (c) == '_')
+#define as_isDigit(c) (isdigit(c))
+#define as_isSpace(c) (isspace(c))
+#define as_isPrint(c) (isprint(c))
+#define as_isXDigit(c) (isxdigit(c))
+#define as_toLower(c) (tolower(c))
+
+
+
+
+#define FIRST_RESERVED 257
 
 
 typedef enum as_reserved {
@@ -61,7 +75,7 @@ typedef struct LexState {
 
     as_State *S;
     as_IO io;
-    as_Buffer buffer;
+    as_Buffer *buffer;
 
     as_String *source;
 

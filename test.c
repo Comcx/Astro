@@ -57,6 +57,8 @@ int main(int argc, char *argv[]) {
     const char *buff = asU_read(S, &size, &fl);
     printf("%s", buff);
 
+    printf("%c", as_toLower('A'));
+
     fclose(file);
 
     S = asE_closeState(S);

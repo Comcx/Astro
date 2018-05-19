@@ -1,10 +1,15 @@
 
 
+
 #include "a_lex.h"
+#include "a_debug.h"
+#include "a_object.h"
+#include <limits.h>
+
 
 
 #define next(ls) ((ls)->current = as_getc((ls)->io))
-
+#define save_and_next(ls) (save(la, la->current), next(ls))
 
 
 static const char *asX_tokens[] = {
@@ -34,15 +39,97 @@ void asX_setInput(as_State *S, LexState *ls, as_IO *io, as_String *source, int f
 }
 
 
+static void save(LexState *ls, int c) {
+
+    as_Buffer *buff = ls->buffer;
+    /*if buffer is not big enough?*/
+
+
+    buff->buffer[as_bufferLen(buff)++] = cast(char, c);
+}
+
+
+const char *asX_token2str(LexState *ls, int token) {
+
+    if (token < FIRST_RESERVED) {   /*single byte char?*/
+
+        as_assert(token == cast_uchar(token));
+        return "underwork...";
+    } else {
+
+        const char *s = asX_tokens[token - FIRST_RESERVED];
+        //note! we have not deal with format str or token > TK_EOS!
+        return s;
+    }
+}
 
 
 
+static void incLineNumber(LexState *ls) {
+
+    int old = ls->current;
+    as_assert(isNewLine(ls));
+    next(ls);
+
+    if (++ls->num_line > INT_MAX) {
+
+        printf("too many lines!?");
+    }
+
+}
 
 
 
+/***************************************************************************
+** Main Lexer!
+ */
+
+
+static checkNext1(LexState *ls, int c) {
+
+    if (ls->current == c) {
+
+        next(ls);
+        return 1;
+    }
+    return 0;
+}
+
+
+static checkNext2(LexState *ls, const char *set) {
+
+    as_assert(set[2] == '\0');
+    if (ls->current == set[0] || ls->current == set[1]) {
+
+        save_and_next(ls);
+        return 1;
+    }
+    return 0;
+}
 
 
 
+/*Astro Numbers*/
+/*
+** Function to read as_Numbers
+ */
+
+static int readNumeral(LexState *ls, SemInfo *seminfo) {
+
+    
+
+
+}
+
+
+static int skip(LexState *ls) {
+
+    int count = 0;
+    int s = ls->current;
+
+
+
+}
 
 
 
