@@ -45,7 +45,7 @@ static void save(LexState *ls, int c) {
     /*if buffer is not big enough?*/
 
 
-    buff->buffer[as_bufferLen(buff)++] = cast(char, c);
+    buff->buffer[asI_bufferLen(buff)++] = cast(char, c);
 }
 
 
@@ -133,7 +133,37 @@ static int skip(LexState *ls) {
 
 
 
+static int lex(LexState *ls, SemInfo *seminfo) {
 
+    asI_resetBuffer(ls->buffer);
+    while (1) {
+
+        switch (ls->current) {
+
+            case '\n': case '\r': { /*end of line*/
+                incLineNumber(ls);
+                break;
+            }
+            case ' ': case '\f': case '\t': case '\v': {    /*spaces*/
+                next(ls);
+                break;
+            }
+            case '-': { /*'-' or '--'comment?*/
+                next(ls);
+                if (ls->current != '-') return '-';
+
+                next(ls);
+                if (ls->current == '"') { /*long comment*/
+
+                }
+            }
+
+        }
+
+    }
+
+    return 0;
+}
 
 
 

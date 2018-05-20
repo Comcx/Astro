@@ -10,7 +10,7 @@
 #include <ctype.h>
 
 
-#define as_isNewLine(c) ((c) == '\n' || (c) == '\r')
+#define as_isNewLine(ls) ((ls)->current == '\n' || (ls)->current == '\r')
 
 #define as_isAlpha(c) (isalpha(c) || (c) == '_')
 #define as_isAlnum(c) (isalnum(c) || (c) == '_')
