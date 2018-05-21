@@ -30,7 +30,7 @@ int main(int argc, char *argv[]) {
     t->array[0] = v;
     debug_Table(t);
 
-    str = asS_freeString(S, str);
+    //str = asS_freeString(S, str);
     
     /*
     int order = (4 << 23) | (3 << 14) | (2 << 6) | 1;
@@ -52,12 +52,18 @@ int main(int argc, char *argv[]) {
 
     //char buff[50];
     //fread(buff, 1, 5, file);
-    
-    size_t size;
-    const char *buff = asU_read(S, &size, &fl);
-    printf("%s", buff);
 
-    printf("%c", as_toLower('A'));
+    as_IO io;
+    asI_init(S, &io, asU_read, &fl);
+
+    //int ch = as_getc(&io);
+    LexState ls;
+    asX_setInput(S, &ls, &io, str, asI_fill(&io));
+    
+    //const char *buff = asU_read(S, &size, &fl);
+    printf("%c\n", cast(char, ls.current));
+    printf("%s", io.p);
+
 
     fclose(file);
 
