@@ -75,6 +75,9 @@ int main(int argc, char *argv[]) {
     asX_next(&ls);
     printf("%lf\n", ls.t.semInfo.r);
 
+    asX_next(&ls);
+    printf("%s\n", ls.buffer->buffer);
+
 
     fclose(file);
 

@@ -173,6 +173,38 @@ static int readNumeral(LexState *ls, SemInfo *seminfo) {
 }
 
 
+
+static void readLongString(LexState *ls, SemInfo *seminfo) {
+
+    next(ls);
+    while (ls->current != '"' && ls->current != EOI) {
+
+        if (ls->current == '\\') {
+
+            if (checkNext1(ls, '"'))
+                save_and_next(ls);
+
+        } else save_and_next(ls);
+    }
+
+    if (ls->current == EOI) {
+
+        lexError(ls, "uncompleted string!", 0);
+    } else {
+        save(ls, '\0');
+        next(ls);
+    }
+
+}
+
+
+static void readString(LexState *ls, SemInfo *seminfo) {
+
+
+}
+
+
+
 static int skip(LexState *ls) {
 
     int count = 0;
@@ -234,6 +266,10 @@ static int lex(LexState *ls, SemInfo *seminfo) {
                 next(ls);
                 if (checkNext1(ls, '='))    return TK_NE;
                 else return '~';
+            }
+            case '"': {
+                readLongString(ls, seminfo);
+                return TK_STRING;
             }
 
             default: {
