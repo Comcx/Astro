@@ -6,10 +6,10 @@
 
 #include "a_state.h"
 #include "a_object.h"
+#include "a_type.h"
 #include "a_io.h"
-#include <ctype.h>
 
-
+/*
 #define as_isNewLine(ls) ((ls)->current == '\n' || (ls)->current == '\r')
 
 #define as_isAlpha(c) (isalpha(c) || (c) == '_')
@@ -19,7 +19,7 @@
 #define as_isPrint(c) (isprint(c))
 #define as_isXDigit(c) (isxdigit(c))
 #define as_toLower(c) (tolower(c))
-
+*/                                                                          
 
 
 

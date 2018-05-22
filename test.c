@@ -64,6 +64,13 @@ int main(int argc, char *argv[]) {
     //const char *buff = asU_read(S, &size, &fl);
     printf("%c\n", cast(char, ls.current));
     printf("%s", io.p);
+    
+
+    as_Value obj;
+    const char *str_num = "0x10a";
+
+    asO_str2num(str_num, &obj);
+    printf("%d", getValue(&obj).i);
 
 
     fclose(file);

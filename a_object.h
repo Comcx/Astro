@@ -64,6 +64,7 @@ typedef struct as_Value {
         
         GCObject *gc;
         as_Integer b;
+        as_Integer i;
         as_Number n;
         void *p;
 
@@ -82,6 +83,8 @@ typedef struct as_Value {
 #define setType(o, t) ((o)->type = (t))
 #define setNumber(o, x) \
     {as_Value *o_ = (o); getValue(o_).n = x; setType(o_, AS_TNUMBER);}
+#define setInteger(o, integer) \
+    {as_Value *o_ = (o); getValue(o_).i = integer; setType(o_, AS_TNUMINT);}
 
 #define setBoolean(o, x) \
     {as_Value *o_ = (o); getValue(o_).b = x; setType(o_, AS_TBOOLEAN);}
@@ -286,7 +289,8 @@ struct GCObject {
 /*Functions for objects*/
 void printObject(as_Value *v);
 
-size_t asO_str2num(const char *str);
+int asO_getHexValue(int c);
+size_t asO_str2num(const char *str, as_Value *obj);
 
 
 
