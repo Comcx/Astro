@@ -79,7 +79,7 @@
 
 #endif
 
-#define AS_FLOAT_TYPE AS_FLOAT_FLOAT
+#define AS_FLOAT_TYPE AS_FLOAT_DOUBLE
 
 
 /*

@@ -67,10 +67,12 @@ int main(int argc, char *argv[]) {
     asI_resizeBuffer(S, ls.buffer, 512);
 
     asX_next(&ls);
-    printf("%f\n", ls.t.semInfo.r);
+    printf("%.10lf\n", ls.t.semInfo.r);
 
     asX_next(&ls);
     printf("%d\n", ls.t.semInfo.i);
+
+
 
     fclose(file);
 

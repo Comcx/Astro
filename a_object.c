@@ -92,7 +92,7 @@ static const char *str2flt(const char *str, as_Number *n) {
 
     as_Number a;
     char *ptr_end;
-    a = cast(as_Number, strtof(str, &ptr_end));
+    a = cast(as_Number, strtod(str, &ptr_end));
 
     if (*ptr_end != '\0') {
 
