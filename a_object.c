@@ -3,6 +3,7 @@
 #include "a_object.h"
 #include "a_type.h"
 #include "a_debug.h"
+#include <stdlib.h>
 
 
 void printObject(as_Value *v) {
@@ -87,6 +88,24 @@ static const char *str2int(const char *str, as_Integer *i) {
 }
 
 
+static const char *str2flt(const char *str, as_Number *n) {
+
+    as_Number a;
+    char *ptr_end;
+    a = cast(as_Number, strtof(str, &ptr_end));
+
+    if (*ptr_end != '\0') {
+
+        return NULL;
+    } else {
+
+        *n = a;
+        return ptr_end;
+    }
+
+}
+
+
 size_t asO_str2num(const char *str, as_Value *obj) {
 
     as_Number n;
@@ -96,6 +115,9 @@ size_t asO_str2num(const char *str, as_Value *obj) {
     if ((e = str2int(str, &i)) != NULL) {
 
         setInteger(obj, i);    
+    } else if ((e = str2flt(str, &n)) != NULL) {
+
+        setNumber(obj, n);
     } else return 0;
 
     return e - str + 1;

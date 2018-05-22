@@ -9,7 +9,7 @@
 #include "a_io.h"
 #include "a_lex.h"
 #include "a_debug.h"
-
+#include <stdlib.h>
 
 
 
@@ -67,10 +67,18 @@ int main(int argc, char *argv[]) {
     
 
     as_Value obj;
-    const char *str_num = "0x10a";
+    const char *str_num = "-0x0a.0";
 
-    asO_str2num(str_num, &obj);
-    printf("%d", getValue(&obj).i);
+    int test = asO_str2num(str_num, &obj);
+    printf("%f\n", getValue(&obj).n);
+    printf("%d", test);
+
+
+    const char *str_flt = "51.32e1";
+    char *ptr;
+    float res = strtof(str_flt, &ptr);
+    printf("%f\n", res);
+    printf("%d\n", *ptr == '\0');
 
 
     fclose(file);
