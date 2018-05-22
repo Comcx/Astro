@@ -80,6 +80,11 @@ typedef struct as_Value {
 #define getTypeWithVar(o) (getTypeRaw(o) & 0x3F)
 #define getTypeNoVar(o) (removeVar(getTypeRaw(o)))
 
+#define typeIsInteger(o) (getTypeWithVar(o) == AS_TNUMINT)
+#define typeIsNumber(o) (getTypeWithVar(o) == AS_TNUMBER)
+#define typeIsBoolean(o) (getTypeNoVar(o) == AS_TBOOLEAN)
+#define typeIsString(o) (getTypeNoVar(o) == AS_TSTRING)
+
 #define setType(o, t) ((o)->type = (t))
 #define setNumber(o, x) \
     {as_Value *o_ = (o); getValue(o_).n = x; setType(o_, AS_TNUMBER);}

@@ -67,18 +67,11 @@ int main(int argc, char *argv[]) {
     
 
     as_Value obj;
-    const char *str_num = "-0x0a.0";
+    const char *str_num = "-0x0a.0p2";
 
     int test = asO_str2num(str_num, &obj);
     printf("%f\n", getValue(&obj).n);
-    printf("%d", test);
 
-
-    const char *str_flt = "51.32e1";
-    char *ptr;
-    float res = strtof(str_flt, &ptr);
-    printf("%f\n", res);
-    printf("%d\n", *ptr == '\0');
 
 
     fclose(file);

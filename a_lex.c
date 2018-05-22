@@ -39,11 +39,26 @@ void asX_setInput(as_State *S, LexState *ls, as_IO *io, as_String *source, int f
 }
 
 
+static void lexError(LexState *ls, const char *msg, int token) {
+
+    printf("\nError with %c, %s", cast_uchar(token), msg);
+    exit(-1);
+
+}
+                                                                   
+
 static void save(LexState *ls, int c) {
 
     as_Buffer *buff = ls->buffer;
     /*if buffer is not big enough?*/
+    if (asI_bufferLen(buff) + 1 > asI_bufferSize(buff)) {
 
+        size_t size_new;
+        if (asI_bufferSize(buff) >= INT_MAX/2)
+            lexError(ls, "buffer size too big!", 0);
+        size_new = asI_bufferSize(buff) * 2;
+        asI_resizeBuffer(ls->S, buff, size_new);
+    }
 
     buff->buffer[asI_bufferLen(buff)++] = cast(char, c);
 }
@@ -62,6 +77,7 @@ const char *asX_token2str(LexState *ls, int token) {
         return s;
     }
 }
+
 
 
 
@@ -116,8 +132,42 @@ static int checkNext2(LexState *ls, const char *set) {
 
 static int readNumeral(LexState *ls, SemInfo *seminfo) {
 
+    as_Value obj;
+    const char *expo = "Ee";
+    int first = ls->current;
+    as_assert(as_isDigit(cast_uchar(first)));
     
+    save_and_next(ls);
+    if (first == '0' && checkNext2(ls, "xX")) {
 
+        expo = "Pp";
+    }
+
+    for (;;) {
+
+        if (checkNext2(ls, expo))
+            checkNext2(ls, "-+");
+        if (as_isXDigit(ls->current))
+            save_and_next(ls);
+        else if (ls->current == '.')
+            save_and_next(ls);
+        else break;
+    }
+    save(ls, '\0');
+    
+    if (asO_str2num(asI_buffer(ls->buffer), &obj) == 0)
+        lexError(ls, "wrong format of number", 0);
+
+    if (typeIsInteger(&obj)) {
+        
+        seminfo->i = getValue(&obj).i;
+        return TK_INT;
+    } else {
+        
+        as_assert(typeIsNumber(&obj));
+        seminfo->r = getValue(&obj).n;
+        return TK_FLT;
+    }
 
 }
 
@@ -136,6 +186,7 @@ static int skip(LexState *ls) {
 static int lex(LexState *ls, SemInfo *seminfo) {
 
     asI_resetBuffer(ls->buffer);
+    
     while (1) {
 
         switch (ls->current) {
@@ -156,6 +207,14 @@ static int lex(LexState *ls, SemInfo *seminfo) {
                 if (ls->current == '"') { /*long comment*/
 
                 }
+            }
+            case '0': case '1': case '2': case '3': case '4':
+            case '5': case '6': case '7': case '8': case '9': {
+                return readNumeral(ls, seminfo);
+            }
+
+            default: {
+                return -1;
             }
 
         }
