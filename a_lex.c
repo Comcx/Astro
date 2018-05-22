@@ -213,6 +213,28 @@ static int lex(LexState *ls, SemInfo *seminfo) {
             case '5': case '6': case '7': case '8': case '9': {
                 return readNumeral(ls, seminfo);
             }
+            case '=': {
+                next(ls);
+                if (checkNext1(ls, '='))    return TK_EQ;
+                else return '=';
+            }
+            case '<': {
+                next(ls);
+                if (checkNext1(ls, '='))    return TK_LE;
+                else if (checkNext1(ls, '<'))   return TK_SHL;
+                else return '<';
+            }
+            case '>': {
+                next(ls);
+                if (checkNext1(ls, '='))    return TK_GE;
+                else if (checkNext1(ls, '>'))   return TK_SHR;
+                else return '>';
+            }
+            case '~': {
+                next(ls);
+                if (checkNext1(ls, '='))    return TK_NE;
+                else return '~';
+            }
 
             default: {
                 return -1;
