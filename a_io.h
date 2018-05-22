@@ -33,7 +33,8 @@ typedef struct as_Buffer {
 #define asI_bufferSize(buff) ((buff)->size)
 #define asI_bufferRemove(buff, i) ((buff)->n -= (i))
 #define asI_resetBuffer(buff) ((buff)->n = 0)
-
+#define asI_resizeBuffer(S, buff, size_new) ((buff)->buffer = asM_realloc(S, (buff)->buffer, size_new)),\
+                                        ((buff)->size = size_new)
 
 
 struct as_IO {

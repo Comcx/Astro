@@ -58,6 +58,7 @@ int main(int argc, char *argv[]) {
 
     //int ch = as_getc(&io);
     LexState ls;
+    
     asX_setInput(S, &ls, &io, str, asI_fill(&io));
     
     //const char *buff = asU_read(S, &size, &fl);
