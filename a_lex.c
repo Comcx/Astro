@@ -131,7 +131,7 @@ static int checkNext2(LexState *ls, const char *set) {
  */
 
 static int readNumeral(LexState *ls, SemInfo *seminfo) {
-
+//exit(-1);printf("\ninto numeral\n");
     as_Value obj;
     const char *expo = "Ee";
     int first = ls->current;
@@ -165,6 +165,7 @@ static int readNumeral(LexState *ls, SemInfo *seminfo) {
     } else {
         
         as_assert(typeIsNumber(&obj));
+        //printf("\nflt!\n");
         seminfo->r = getValue(&obj).n;
         return TK_FLT;
     }
@@ -184,7 +185,7 @@ static int skip(LexState *ls) {
 
 
 static int lex(LexState *ls, SemInfo *seminfo) {
-
+//exit(-1);
     asI_resetBuffer(ls->buffer);
     
     while (1) {
@@ -225,7 +226,14 @@ static int lex(LexState *ls, SemInfo *seminfo) {
 }
 
 
+int asX_next(LexState *ls) {
 
+    ls->t.token = lex(ls, &ls->t.semInfo);
+
+    //printf("%d", ls->t.token == TK_FLT);
+    return ls->t.token;
+
+}
 
 
 

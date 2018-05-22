@@ -58,21 +58,19 @@ int main(int argc, char *argv[]) {
 
     //int ch = as_getc(&io);
     LexState ls;
+    //SemInfo seminfo;
     
     asX_setInput(S, &ls, &io, str, asI_fill(&io));
     
     //const char *buff = asU_read(S, &size, &fl);
-    printf("%c\n", cast(char, ls.current));
-    printf("%s", io.p);
-    
+    ls.buffer = asM_malloc(S, sizeof(as_Buffer));
+    asI_resizeBuffer(S, ls.buffer, 512);
 
-    as_Value obj;
-    const char *str_num = "-0x0a.0p2";
+    asX_next(&ls);
+    printf("%f\n", ls.t.semInfo.r);
 
-    int test = asO_str2num(str_num, &obj);
-    printf("%f\n", getValue(&obj).n);
-
-
+    asX_next(&ls);
+    printf("%d\n", ls.t.semInfo.i);
 
     fclose(file);
 
