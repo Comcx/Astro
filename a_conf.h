@@ -131,7 +131,7 @@
 
     #define AS_DIRSEP "\\"
 #else
-    #define AS_DIRSEP ""/
+    #define AS_DIRSEP "/"
 
 #endif
 
