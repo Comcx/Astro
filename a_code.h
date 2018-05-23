@@ -10,6 +10,16 @@
 
 
 /*===========================================================================
+
+ *part1: Astro OpCodes settings
+  
+  we have 38 OpCodes right now, settings in detail as below...
+  
+
+============================================================================*/
+
+
+/*___________________________________________________________________________
   We assume that instructions are unsigned numbers.
   All instructions have an opcode in the first 6 bits.
   Instructions can have the following fields:
@@ -25,7 +35,7 @@
   for that argument (so that -max is represented by 0, and +max is
   represented by 2*max), which is half the maximum for the corresponding
   unsigned argument.
-===========================================================================*/
+_____________________________________________________________________________*/
 
 
 typedef enum {iABC, iABx, iAsBx, iAx} as_OpMode;  /* basic instruction format */
@@ -41,6 +51,36 @@ typedef enum {iABC, iABx, iAsBx, iAx} as_OpMode;  /* basic instruction format */
 #define SIZE_Ax       (SIZE_C + SIZE_B + SIZE_A)
 
 #define SIZE_OP       6
+
+#define POS_OP      0
+#define POS_A       (POS_OP + SIZE_OP)
+#define POS_C       (POS_A + SIZE_A)
+#define POS_B       (POS_C + SIZE_C)
+#define POS_Bx      POS_C
+#define POS_Ax      POS_A
+
+
+
+
+/*
+** limits for opcode arguments.
+** we use (signed) int to manipulate most arguments,
+** so they must fit in LUAI_BITSINT-1 bits (-1 for sign)
+*/
+
+#if SIZE_Bx < AS_BITSINT - 1
+#define MAXARG_Bx        ((1 << SIZE_Bx) - 1)
+#define MAXARG_sBx        (MAXARG_Bx >> 1)         /* 'sBx' is signed */
+#else
+#define MAXARG_Bx        INT_MAX
+#define MAXARG_sBx        INT_MAX
+#endif
+
+#if SIZE_Ax < AS_BITSINT - 1 
+#define MAXARG_Ax   ((1 << SIZE_Ax) - 1)
+#else
+#define MAXARG_Ax   INT_MAX
+#endif
 
 
 
@@ -114,6 +154,35 @@ OP_VARARG//     A B             R(A), ... ,R(A+B-1) = vararg
 #define getArg_sBx(instruction) (((instruction) & 0xffffc000) >> (SIZE_OP+SIZE_A))
 
 
+
+
+
+/*==============================================================================
+  
+  *part2: Astro (Byte)Code Generator
+  (you can call it bytecode or whatever you like, it's a virtual code set)
+
+===============================================================================*/
+
+
+typedef enum BinOpr {
+
+    OPR_ADD, OPR_SUB, OPR_MUL, OPR_MOD, OPR_POW,    /*+ - * % ^ div*/
+    OPR_DIV,
+    OPR_IDIV,
+    OPR_BAND, OPR_BOR, OPR_BXOR,    /*&, |, ^*/
+    OPR_SHL, OPR_SHR,   /*<< >>*/
+    OPR_CONCAT, /*..*/
+    OPR_EQ, OPR_LT, OPR_LE, /*==, <. <=*/
+    OPR_NE, OPR_GT, OPR_GE, /*~=, >, >=*/
+    OPR_AND, OPR_OR,    /*and, or*/
+    OPR_NOBINOPR    /*none*/
+
+
+} BinOpr;
+
+
+typedef enum UnOpr { OPR_MINUS, OPR_BNOT, OPR_NOT, OPR_LEN, OPR_NOUNOPR } UnOpr;    /*-, ~, not, len, none*/
 
 
 

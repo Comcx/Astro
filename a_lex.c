@@ -179,9 +179,9 @@ static void readLongString(LexState *ls, SemInfo *seminfo) {
     next(ls);
     while (ls->current != '"' && ls->current != EOI) {
 
-        if (ls->current == '\\') {
-
-            if (checkNext1(ls, '"'))
+        if (checkNext1(ls, '\\')) {
+            
+            if (ls->current == '"')
                 save_and_next(ls);
 
         } else save_and_next(ls);
