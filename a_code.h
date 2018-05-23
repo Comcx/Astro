@@ -65,7 +65,7 @@ typedef enum {iABC, iABx, iAsBx, iAx} as_OpMode;  /* basic instruction format */
 /*
 ** limits for opcode arguments.
 ** we use (signed) int to manipulate most arguments,
-** so they must fit in LUAI_BITSINT-1 bits (-1 for sign)
+** so they must fit in AS_BITSINT-1 bits (-1 for sign)
 */
 
 #if SIZE_Bx < AS_BITSINT - 1
@@ -76,11 +76,23 @@ typedef enum {iABC, iABx, iAsBx, iAx} as_OpMode;  /* basic instruction format */
 #define MAXARG_sBx        INT_MAX
 #endif
 
-#if SIZE_Ax < AS_BITSINT - 1 
+#if SIZE_Ax < AS_BITSINT - 1
 #define MAXARG_Ax   ((1 << SIZE_Ax) - 1)
 #else
 #define MAXARG_Ax   INT_MAX
 #endif
+
+
+#define MAXARG_A        ((1<<SIZE_A)-1)
+#define MAXARG_B        ((1<<SIZE_B)-1)
+#define MAXARG_C        ((1<<SIZE_C)-1)
+
+
+/* creates a mask with 'n' 1 bits at position 'p' */
+#define MASK1(n,p)  ((~((~(Instruction)0)<<(n)))<<(p))
+
+/* creates a mask with 'n' 0 bits at position 'p' */
+#define MASK0(n,p)  (~MASK1(n,p))
 
 
 
@@ -154,7 +166,16 @@ OP_VARARG//     A B             R(A), ... ,R(A+B-1) = vararg
 #define getArg_sBx(instruction) (((instruction) & 0xffffc000) >> (SIZE_OP+SIZE_A))
 
 
-
+#define setOpCode(i, o) ((i) = ( ((i) & MASK0(SIZE_OP, POS_OP)) | \
+                                ((cast(Instruction, (o))<<POS_OP) & MASK1(SIZE_OP, POS_OP))) )
+#define setArg(i, v, pos, size) ( (i) = (((i) & MASK0(size, pos)) | \
+                                    ((cast(Instruction, v)<<pos) & MASK1(size, pos))) )
+#define setArg_A(i ,v) setArg(i, v, SIZE_A, POS_A)
+#define setArg_B(i, v) setArg(i, v, SIZE_B, POS_B)
+#define setArg_C(i, v) setArg(i, v, SIZE_C, POS_C)
+#define setArg_Ax(i, v) setArg(i, v, SIZE_Ax, POS_Ax)
+#define setArg_Bx(i, v) setArg(i, v, SIZE_Bx, POS_Bx)
+#define setArg_sBx(i, v) setArg_Bx((i), cast(unsigned int, (v)+MAXARG_sBx))
 
 
 /*==============================================================================
