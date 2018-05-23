@@ -170,11 +170,11 @@ OP_VARARG//     A B             R(A), ... ,R(A+B-1) = vararg
                                 ((cast(Instruction, (o))<<POS_OP) & MASK1(SIZE_OP, POS_OP))) )
 #define setArg(i, v, pos, size) ( (i) = (((i) & MASK0(size, pos)) | \
                                     ((cast(Instruction, v)<<pos) & MASK1(size, pos))) )
-#define setArg_A(i ,v) setArg(i, v, SIZE_A, POS_A)
-#define setArg_B(i, v) setArg(i, v, SIZE_B, POS_B)
-#define setArg_C(i, v) setArg(i, v, SIZE_C, POS_C)
-#define setArg_Ax(i, v) setArg(i, v, SIZE_Ax, POS_Ax)
-#define setArg_Bx(i, v) setArg(i, v, SIZE_Bx, POS_Bx)
+#define setArg_A(i ,v) setArg(i, v, POS_A, SIZE_A)
+#define setArg_B(i, v) setArg(i, v, POS_B, SIZE_B)
+#define setArg_C(i, v) setArg(i, v, POS_C, SIZE_C)
+#define setArg_Ax(i, v) setArg(i, v, POS_Ax, SIZE_Ax)
+#define setArg_Bx(i, v) setArg(i, v, POS_Bx, SIZE_Bx)
 #define setArg_sBx(i, v) setArg_Bx((i), cast(unsigned int, (v)+MAXARG_sBx))
 
 

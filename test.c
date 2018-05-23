@@ -23,35 +23,25 @@ int main(int argc, char *argv[]) {
     
     as_String *str = asS_newString(S, "2333");
 
-    as_Value v;
-    setString(S, &v, str);
+    str = asS_freeString(S, str);
     
-    as_Table *t = asT_newArray(S, 10);
-    t->array[0] = v;
-    debug_Table(t);
-
-    //str = asS_freeString(S, str);
     
-    /*
-    int order = (4 << 23) | (3 << 14) | (2 << 6) | 1;
-    printf("%x\n", order);
+    Instruction order = (4 << 23) | (3 << 14) | (2 << 6) | 1;
+    printf("order: %x\n", order);
     as_OpCode code = OP_MOVE;
-    printf("%d\n", code == getOpCode(order));
-    printf("%d\n%d\n%d\n", getArg_A(order), getArg_B(order), getArg_C(order));
+    printf("OpCode: %d\n", code == getOpCode(order));
+    printf("Regs:\n%d\n%d\n%d\n", getArg_A(order), getArg_B(order), getArg_C(order));
     
-    int x = OP_LOADK;
-    printf("%d\n", x);*/
+    setArg_B(order, 7);
+    printf("OpCode_new: %d\n", getArg_A(order));
 
-    
+    printf("\n--------------------\n");    
     FILE *file;
     file = fopen("test.txt", "r");
 
     FileLoader fl;
     fl.file = file;
     fl.n = 0;
-
-    //char buff[50];
-    //fread(buff, 1, 5, file);
 
     as_IO io;
     asI_init(S, &io, asU_read, &fl);
