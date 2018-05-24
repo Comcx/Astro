@@ -7,6 +7,7 @@
 #include "a_debug.h"
 #include "a_limit.h"
 #include "a_object.h"
+//#include ""
 
 
 /*===========================================================================
@@ -216,7 +217,7 @@ const char* const asC_OpName[NUM_OPCODE];
                             | (cast(Instruction, a) << POS_A) \
                             | (cast(Instruction, b) << POS_B) \
                             | (cast(Instruction, c) << POS_C) )
-#define craete_ABx(op, a, bc) ( (cast(Instruction, op) << POS_OP) \
+#define create_ABx(op, a, bc) ( (cast(Instruction, op) << POS_OP) \
                             | (cast(Instruction, a) << POS_A) \
                             | (cast(Instruction, bc) << POS_Bx) )
 #define create_Ax(op, a) ( (cast(Instruction, op) << POS_OP) \
@@ -254,7 +255,7 @@ typedef enum BinOpr {
 typedef enum UnOpr { OPR_MINUS, OPR_BNOT, OPR_NOT, OPR_LEN, OPR_NOUNOPR } UnOpr;    /*-, ~, not, len, none*/
 
 
-
+int asC_codeABC(FuncState *fs, as_OpCode o, int a, int b, int c);
 
 
 

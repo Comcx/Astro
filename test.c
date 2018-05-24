@@ -26,14 +26,14 @@ int main(int argc, char *argv[]) {
     str = asS_freeString(S, str);
     
     
-    Instruction order = (4 << 23) | (3 << 14) | (2 << 6) | 1;
-    printf("order: %x\n", order);
-    as_OpCode code = OP_MOVE;
-    printf("OpCode: %d\n", code == getOpCode(order));
-    printf("Regs:\n%d\n%d\n%d\n", getArg_A(order), getArg_B(order), getArg_C(order));
+    Instruction order_ABC = create_ABC(OP_MOVE, 7, 8, 9);
+    Instruction order_ABx = create_ABx(OP_LOADK, 4, 5);
+    Instruction order_Ax = create_Ax(OP_LOADNIL, 1);
     
-    setArg_B(order, 7);
-    printf("OpCode_new: %d\n", getArg_A(order));
+    printf("ABC: %s %d %d %d\n", asC_OpName[getOpCode(order_ABC)], getArg_A(order_ABC), getArg_B(order_ABC), getArg_C(order_ABC));
+    printf("ABx: %s %d %d\n", asC_OpName[getOpCode(order_ABx)], getArg_A(order_ABx), getArg_Bx(order_ABx));
+    printf("Ax: %s %d\n", asC_OpName[getOpCode(order_Ax)], getArg_Ax(order_Ax));
+
 
     printf("\n--------------------\n");    
     FILE *file;
