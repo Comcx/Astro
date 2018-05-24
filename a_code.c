@@ -2,7 +2,8 @@
 #include "a_code.h"
 
 
-const char* const asC_OpName[OP_OPCODE] = {
+
+const char* const asC_OpName[NUM_OPCODE] = {
 
 "MOVE",
 "LOADK",
