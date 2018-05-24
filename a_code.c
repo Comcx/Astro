@@ -91,7 +91,7 @@ OpFormat(0, 1, OpArgR, OpArgN, iAsBx),  /*OP_TFORLOOP*/
 OpFormat(0, 0, OpArgU, OpArgU, iABC),   /*OP_SETLIST*/
 OpFormat(0, 0, OpArgR, OpArgN, iABC),   /*OP_CLOSE*/
 OpFormat(0, 1, OpArgU, OpArgN, iABx),   /*OP_CLOSURE*/
-OpFormat(0, 1, OpArgU, OpArgN, iABC),   /*OP_VARARG*/
+OpFormat(0, 1, OpArgU, OpArgN, iABC)    /*OP_VARARG*/
 
 };
 
