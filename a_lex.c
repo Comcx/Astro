@@ -238,8 +238,17 @@ static int lex(LexState *ls, SemInfo *seminfo) {
 
                 next(ls);
                 if (ls->current == '"') { /*long comment*/
+                    
+                    readLongString(ls, seminfo);
+                    asI_resetBuffer(ls->buffer);    /*to clean the buffer*/
+                } else {
 
+                    while (!as_isNewLine(ls) && ls->current != EOI) {
+
+                        next(ls);
+                    }
                 }
+                break;
             }
             case '0': case '1': case '2': case '3': case '4':
             case '5': case '6': case '7': case '8': case '9': {
@@ -271,9 +280,26 @@ static int lex(LexState *ls, SemInfo *seminfo) {
                 readLongString(ls, seminfo);
                 return TK_STRING;
             }
+            case EOI: {
+                return TK_EOS;
+            }
 
             default: {
-                return -1;
+                if (as_isAlpha(ls->current)) {
+
+                    as_String *str;
+                    do {
+                        save_and_next(ls);
+                    } while (as_isAlnum(ls->current));
+                    save(ls, '\0');
+
+                    return TK_NAME;
+                } else {
+
+                    int c = ls->current;
+                    next(ls);
+                    return c;
+                }
             }
 
         }
