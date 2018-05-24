@@ -212,6 +212,15 @@ const char* const asC_OpName[NUM_OPCODE];
 #define setArg_Bx(i, v) setArg(i, v, POS_Bx, SIZE_Bx)
 #define setArg_sBx(i, v) setArg_Bx((i), cast(unsigned int, (v)+MAXARG_sBx))
 
+#define create_ABC(op, a, b, c) ( (cast(Instruction, op) << POS_OP) \
+                            | (cast(Instruction, a) << POS_A) \
+                            | (cast(Instruction, b) << POS_B) \
+                            | (cast(Instruction, c) << POS_C) )
+#define craete_ABx(op, a, bc) ( (cast(Instruction, op) << POS_OP) \
+                            | (cast(Instruction, a) << POS_A) \
+                            | (cast(Instruction, bc) << POS_Bx) )
+#define create_Ax(op, a) ( (cast(Instruction, op) << POS_OP) \
+                            | (cast(Instruction, a) << POS_Ax) )
 
 
 
