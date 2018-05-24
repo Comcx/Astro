@@ -157,6 +157,41 @@ OP_VARARG//     A B             R(A), ... ,R(A+B-1) = vararg
 } as_OpCode;
 
 
+
+
+
+/*
+** masks for instruction properties. The format is:
+** bits 0-1: op mode
+** bits 2-3: C arg mode
+** bits 4-5: B arg mode
+** bit 6: instruction set register A
+** bit 7: operator is a test (next instruction must be a jump)
+*/
+
+
+enum OpArgMask {    /*Arg masks, to define arg formats*/
+
+    OpArgN, /*argument is not used*/
+    OpArgU, /*argument is used*/
+    OpArgR, /*argument is register or jump offset*/
+    OpArgK  /*argument is constant or register*/
+};
+
+const as_Byte asC_OpFormat[NUM_OPCODE];
+const char* const asC_OpName[NUM_OPCODE];
+
+
+#define getOpMode(m) (cast(enum OpArgMask, asC_OpFormat[m] & 3))
+#define getModeArg_B(m) (cast(enum OpArgMask, (asC_OpFormat[m] >> 4) & 3))
+#define getModeArg_C(m) (cast(enum OpArgMask, (asC_OpFormat[m] >> 2) & 3))
+#define testModeArg_A(m) (asC_OpFormat[m] & (1 << 6))
+#define testModeT(m) (asC_OpFormat[m] & (1 << 7))
+
+
+
+/*Useful marcos for OpCodes*/
+
 #define getOpCode(instruction) ((instruction) & 0x003f)
 #define getArg_A(instruction) (((instruction) & 0x3fc0) >> SIZE_OP)
 #define getArg_B(instruction) (((instruction) & 0xff800000) >> (SIZE_OP+SIZE_A+SIZE_C))
@@ -176,6 +211,10 @@ OP_VARARG//     A B             R(A), ... ,R(A+B-1) = vararg
 #define setArg_Ax(i, v) setArg(i, v, POS_Ax, SIZE_Ax)
 #define setArg_Bx(i, v) setArg(i, v, POS_Bx, SIZE_Bx)
 #define setArg_sBx(i, v) setArg_Bx((i), cast(unsigned int, (v)+MAXARG_sBx))
+
+
+
+
 
 
 /*==============================================================================
