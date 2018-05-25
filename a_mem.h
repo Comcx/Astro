@@ -28,7 +28,7 @@
 
 #define asM_newVector(S, num, t) \
     cast(t *, ((S)->G->fn_alloc(NULL, sizeof(t), 0, num)))
-
+#define asM_growVector(S, num) 
 
 
 #endif

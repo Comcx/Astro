@@ -176,7 +176,7 @@ static int readNumeral(LexState *ls, SemInfo *seminfo) {
 
 static void readLongString(LexState *ls, SemInfo *seminfo) {
 
-    next(ls);
+    next(ls);   /*skip '"'*/
     while (ls->current != '"' && ls->current != EOI) {
 
         if (checkNext1(ls, '\\')) {
@@ -189,7 +189,7 @@ static void readLongString(LexState *ls, SemInfo *seminfo) {
 
     if (ls->current == EOI) {
 
-        lexError(ls, "uncompleted string!", 0);
+        lexError(ls, "uncompleted long string!", 0);
     } else {
         save(ls, '\0');
         next(ls);
@@ -200,6 +200,45 @@ static void readLongString(LexState *ls, SemInfo *seminfo) {
 
 static void readString(LexState *ls, SemInfo *seminfo) {
 
+    next(ls);   /*skip '\''*/
+    while (ls->current != '\'' && ls->current != EOI) {
+
+        if (checkNext1(ls, '\\')) {
+            
+            int c;
+            switch (ls->current) {
+                case '\'': 
+                    c = '\'';
+                    break;
+                case 'n': c = '\n'; break;
+                case 'a': c = '\a'; break;
+                case 'b': c = '\b'; break;
+                case 'f': c = '\f'; break;
+                case 'r': c = '\r'; break;
+                case 't': c = '\t'; break;
+                case 'v': c = '\v'; break;
+            }
+            save(ls, c);
+            next(ls);
+        } else {
+
+            if (ls->current == '\n' || ls->current == '\r') {
+
+                lexError(ls, "unfinished string!", 0);
+                break;
+            }
+            save_and_next(ls);
+        }
+    }
+
+    if (ls->current == EOI) {
+
+        lexError(ls, "unfinished string!", 0);
+    } else {
+
+        save(ls, '\0');
+        next(ls);
+    }
 
 }
 
@@ -278,6 +317,10 @@ static int lex(LexState *ls, SemInfo *seminfo) {
             }
             case '"': {
                 readLongString(ls, seminfo);
+                return TK_STRING;
+            }
+            case '\'': {
+                readString(ls, seminfo);
                 return TK_STRING;
             }
             case EOI: {
