@@ -106,6 +106,11 @@ OpFormat(0, 1, OpArgU, OpArgN, iABC)    /*OP_VARARG*/
 =====================================================================*/
 
 
+
+/*
+** General code generator
+ */
+
 static int asC_code(FuncState *fs, Instruction i) {
 
     Proto *f = fs->f;
