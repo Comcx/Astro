@@ -2,6 +2,9 @@
 #include "a_code.h"
 #include "a_debug.h"
 
+#include <math.h>
+
+
 
 const char* const asC_OpName[NUM_OPCODE] = {
 
@@ -115,6 +118,14 @@ OpFormat(0, 1, OpArgU, OpArgN, iABC)    /*OP_VARARG*/
 #define hasJump(e) ((e->t != (e)->f))
 
 
+static void parseError(FuncState *fs, const char *msg, int info) {
+
+    printf("Parser error! %s; %d\n", msg, info);
+    exit(-1);
+
+}
+
+
 
 static int asC_code(FuncState *fs, Instruction i) {
 
@@ -180,6 +191,11 @@ void asC_LOADNIL(FuncState *fs, int from, int n) {
 
 
 
+/*
+** Jump tool functions
+ */
+
+/*to get destination from jump instruction*/
 static int getJumpDest(FuncState *fs, int pc) {
 
     int offset = getArg_sBx(fs->f->code[pc]);
@@ -189,24 +205,94 @@ static int getJumpDest(FuncState *fs, int pc) {
     else return pc + 1 +offset;
 }
 
+/*to set destination to jump instruction*/
+static void setJumpDest(FuncState *fs, int pc, int dest) {
+
+    Instruction *jump = &fs->f->code[pc];
+    int offset = dest - pc + 1;
+    as_assert(dest != NO_JUMP);
+
+    if (abs(offset) > MAXARG_sBx)
+        parseError(fs, "Jump control dest too long?", 0);
+    setArg_sBx(*jump, offset);
+}
+
+
+/*to concat jump list*/
+void asC_concatJumpList(FuncState *fs, int *l1, int l2) {
+
+    if (l2 == NO_JUMP) return;  /*nothing to concat?*/
+    else if (*l1 == NO_JUMP)
+        *l1 = l2;
+    else {
+        int list = *l1;
+        int next;
+        while ((next = getJumpDest(fs, list)) != NO_JUMP) {
+            list = next;
+        }
+        setJumpDest(fs, list, l2);
+    }
+
+}
+
+
+/*Create JMP instruction, here jump destination can be fixed later*/
+int asC_JMP(FuncState *fs) {
+
+    int pc_j = fs->pc_j;
+    int j;
+    fs->pc_j = NO_JUMP;
+    j = asC_codeAsBx(fs, OP_JMP, 0, NO_JUMP);
+    asC_concatJumpList(fs, &j, pc_j);
+    return j;
+}
+
+
+/*Create RETURN Instruction*/
+void asC_RETURN(FuncState *fs, int first, int num_ret) {
+
+    asC_codeABC(fs, OP_RETURN, first, num_ret+1, 0);
+
+}
+
+
+/*Code a conditional jump*/
+static int condJump(FuncState *fs, as_OpCode op, int a, int b, int c) {
+
+    asC_codeABC(fs, op, a, b, c);
+    return asC_JMP(fs);
+}
+
+
+/*return current pc and mark it as last jump target*/
+int asC_getLabel(FuncState *fs) {
+
+    fs->lastTarget = fs->pc;
+    return fs->pc;
+}
+
+
+
+/*Return the position of the control of jump instruction
+  or the jump itself if it's unconditional*/
+static Instruction *getJumpControl(FuncState *fs, int pc) {
+
+    Instruction *i = &fs->f->code[pc];
+    if (pc >= 1 && testModeT(getOpCode(*(i-1)))) {
+        return i - 1;
+    } else return i;
+}
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/*
+** Patch destination register for a TESTSET instruction.
+** If instruction in position 'node' is not a TESTSET, return 0 ("fails").
+** Otherwise, if 'reg' is not 'NO_REG', set it as the destination
+** register. Otherwise, change instruction to a simple 'TEST' (produces
+** no register value)
+*/
 
 
 

@@ -238,7 +238,7 @@ const char* const asC_OpName[NUM_OPCODE];
 ===============================================================================*/
 
 
-#define NO_JUMP -1
+#define NO_JUMP (-1)
 
 
 typedef enum BinOpr {
@@ -268,8 +268,9 @@ int asC_codeABx(FuncState *fs, as_OpCode o, int a, unsigned int bx);
                                                                                 can be stored >0*/
 
 void asC_LOADNIL(FuncState *fs, int front, int n);
-
-
+void asC_concatJumpList(FuncState *fs, int *l1, int l2);
+int asC_JMP(FuncState *fs);
+void asC_RETURN(FuncState *fs, int first, int num_ret);
 
 
 
