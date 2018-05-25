@@ -68,9 +68,14 @@ int main(int argc, char *argv[]) {
     asX_next(&ls);
     printf("%s\n", ls.buffer->buffer);
     //printf("%d\n", ls.t.semInfo.i);
+
     
-    asX_next(&ls);
-    printf("%s\n", ls.buffer->buffer);
+    int *test = asM_newVector(S, 3, int);
+    asM_growVector(S, test, 2, 3, 10, int);
+    *test = 1;
+    *(test+3) = 2;
+    printf("%d\n", test[3]);
+    test = asM_free(S, test);
 
     fclose(file);
 

@@ -219,6 +219,8 @@ typedef struct Proto{
     int size_k;             /*size of consts*/
     int size_UpVal;         /*size of upvals*/
     int size_LocVar;        /*size of local vars*/
+    int size_code;
+    int size_lineInfo;
 
     Instruction *code;      /*codes in proto*/
     struct Proto **p;       /*functions defined in*/
@@ -226,7 +228,7 @@ typedef struct Proto{
     LocVar *locVar;         /*local vars*/
     UpValDesc *upVal;       /*upvalues*/
 
-    int info_line;          /*line info for debug*/
+    int *info_line;          /*line info for debug*/
 
     GCObject *gclist;
 

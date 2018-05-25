@@ -1,6 +1,6 @@
 
 #include "a_code.h"
-
+#include "a_debug.h"
 
 
 const char* const asC_OpName[NUM_OPCODE] = {
@@ -110,16 +110,37 @@ static int asC_code(FuncState *fs, Instruction i) {
 
     Proto *f = fs->f;
     //dischargePC_J()
-
+    /*put new instruction in code array*/
+    asM_growVector(fs->ls->S, f->code, fs->pc, f->size_code, INT_MAX, Instruction);
+    f->code[fs->pc] = i;
+    
+    /*put line info into proto f*/
+    asM_growVector(fs->ls->S, f->info_line, fs->pc, f->size_lineInfo, INT_MAX, int);
+    f->info_line[fs->pc] = fs->ls->lastLine;
     
     return fs->pc++;
 }
 
 
+int asC_codeABC(FuncState *fs, as_OpCode o, int a, int b, int c) {
+
+    as_assert(getOpMode(o) == iABC);
+    as_assert(getModeArg_B(o) != OpArgN || b == 0);
+    as_assert(getModeArg_C(o) != OpArgN || c == 0);
+    as_assert(a <= MAXARG_A && b <= MAXARG_B && c <= MAXARG_C);
+
+    return asC_code(fs, create_ABC(o, a, b, c));
+}
 
 
+int asC_codeABx(FuncState *fs, as_OpCode o, int a, unsigned int bx) {
 
+    as_assert(getOpMode(o) == iABx || getOpMode(o) == iAsBx);
+    as_assert(getModeArg_C(o) == OpArgN);
+    as_assert(a <= MAXARG_A && bx <= MAXARG_Bx);
 
+    return asC_code(fs, create_ABx(o, a, bx));
+}
 
 
 
