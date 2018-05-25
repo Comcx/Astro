@@ -256,8 +256,10 @@ typedef enum BinOpr {
 typedef enum UnOpr { OPR_MINUS, OPR_BNOT, OPR_NOT, OPR_LEN, OPR_NOUNOPR } UnOpr;    /*-, ~, not, len, none*/
 
 
-int asC_codeABC(FuncState *fs, as_OpCode o, int a, int b, int c);
 
+
+int asC_codeABC(FuncState *fs, as_OpCode o, int a, int b, int c);
+int asC_codeABx(FuncState *fs, as_OpCode o, int a, unsigned int bx);
 
 
 

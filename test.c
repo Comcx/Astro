@@ -66,8 +66,8 @@ int main(int argc, char *argv[]) {
     printf("%lf\n", ls.t.semInfo.r);
 
     asX_next(&ls);
-    //printf("%s\n", ls.buffer->buffer);
-    printf("%d\n", ls.t.semInfo.i);
+    printf("%s\n", ls.buffer->buffer);
+    //printf("%d\n", ls.t.semInfo.i);
     
     asX_next(&ls);
     printf("%s\n", ls.buffer->buffer);
