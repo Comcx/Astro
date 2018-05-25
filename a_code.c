@@ -111,6 +111,11 @@ OpFormat(0, 1, OpArgU, OpArgN, iABC)    /*OP_VARARG*/
 ** General code generator
  */
 
+
+#define hasJump(e) ((e->t != (e)->f))
+
+
+
 static int asC_code(FuncState *fs, Instruction i) {
 
     Proto *f = fs->f;
@@ -146,6 +151,63 @@ int asC_codeABx(FuncState *fs, as_OpCode o, int a, unsigned int bx) {
 
     return asC_code(fs, create_ABx(o, a, bx));
 }
+
+
+
+/*LOADNIL Instruction, front is the first register, n is the number of registers*/
+void asC_LOADNIL(FuncState *fs, int from, int n) {
+
+    Instruction *i_prev;
+    int last = from + n - 1;
+    if (fs->pc > fs->lastTarget) {  /*avoid jump instruction*/
+        i_prev = &(fs->f->code[fs->pc-1]);
+        if (getOpCode(*i_prev) == OP_LOADNIL) {
+            int from_ = getArg_A(*i_prev);
+            int last_ = getArg_B(*i_prev);
+
+            if ( (from_ <= from && from <= last_ + 1) ||
+                 (from <= from_ && last_ <= last + 1)) {    /*if can be concated*/
+                 if (from_ < from) from = from_;
+                 if (last_ > last) last = last_;
+                 setArg_A(*i_prev, from);
+                 setArg_B(*i_prev, last);
+                 return;
+            }
+        }
+    }/*can not be optimized...*/
+    asC_codeABC(fs, OP_LOADNIL, from, n-1, 0);
+}
+
+
+
+static int getJumpDest(FuncState *fs, int pc) {
+
+    int offset = getArg_sBx(fs->f->code[pc]);
+    if (offset == NO_JUMP) {
+        return NO_JUMP;
+    }
+    else return pc + 1 +offset;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

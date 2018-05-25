@@ -30,8 +30,10 @@ int main(int argc, char *argv[]) {
     Instruction order_ABx = create_ABx(OP_LOADK, 4, 5);
     Instruction order_Ax = create_Ax(OP_LOADNIL, 1);
     
+    setArg_sBx(order_ABx, -2);
+
     printf("ABC: %s %d %d %d\n", asC_OpName[getOpCode(order_ABC)], getArg_A(order_ABC), getArg_B(order_ABC), getArg_C(order_ABC));
-    printf("ABx: %s %d %d\n", asC_OpName[getOpCode(order_ABx)], getArg_A(order_ABx), getArg_Bx(order_ABx));
+    printf("ABx: %s %d %d\n", asC_OpName[getOpCode(order_ABx)], getArg_A(order_ABx), getArg_sBx(order_ABx));
     printf("Ax: %s %d\n", asC_OpName[getOpCode(order_Ax)], getArg_Ax(order_Ax));
 
 

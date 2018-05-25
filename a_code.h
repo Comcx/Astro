@@ -63,7 +63,6 @@ typedef enum {iABC, iABx, iAsBx, iAx} as_OpMode;  /* basic instruction format */
 
 
 
-
 /*
 ** limits for opcode arguments.
 ** we use (signed) int to manipulate most arguments,
@@ -88,6 +87,9 @@ typedef enum {iABC, iABx, iAsBx, iAx} as_OpMode;  /* basic instruction format */
 #define MAXARG_A        ((1<<SIZE_A)-1)
 #define MAXARG_B        ((1<<SIZE_B)-1)
 #define MAXARG_C        ((1<<SIZE_C)-1)
+
+#define OFFSET_sBx       MAXARG_sBx
+
 
 
 /* creates a mask with 'n' 1 bits at position 'p' */
@@ -200,7 +202,7 @@ const char* const asC_OpName[NUM_OPCODE];
 #define getArg_C(instruction) (((instruction) & 0x7fc000) >> (SIZE_OP+SIZE_A))
 #define getArg_Ax(instruction) (((instruction) & 0xffffffc0) >> SIZE_OP)
 #define getArg_Bx(instruction) (((instruction) & 0xffffc000) >> (SIZE_OP+SIZE_A))
-#define getArg_sBx(instruction) (((instruction) & 0xffffc000) >> (SIZE_OP+SIZE_A))
+#define getArg_sBx(instruction) ((((instruction) & 0xffffc000) >> (SIZE_OP+SIZE_A)) - OFFSET_sBx)
 
 
 #define setOpCode(i, o) ((i) = ( ((i) & MASK0(SIZE_OP, POS_OP)) | \
@@ -212,7 +214,7 @@ const char* const asC_OpName[NUM_OPCODE];
 #define setArg_C(i, v) setArg(i, v, POS_C, SIZE_C)
 #define setArg_Ax(i, v) setArg(i, v, POS_Ax, SIZE_Ax)
 #define setArg_Bx(i, v) setArg(i, v, POS_Bx, SIZE_Bx)
-#define setArg_sBx(i, v) setArg_Bx((i), cast(unsigned int, (v)+MAXARG_sBx))
+#define setArg_sBx(i, v) setArg_Bx((i), cast(unsigned int, (v)+OFFSET_sBx))
 
 #define create_ABC(op, a, b, c) ( (cast(Instruction, op) << POS_OP) \
                             | (cast(Instruction, a) << POS_A) \
@@ -236,6 +238,9 @@ const char* const asC_OpName[NUM_OPCODE];
 ===============================================================================*/
 
 
+#define NO_JUMP -1
+
+
 typedef enum BinOpr {
 
     OPR_ADD, OPR_SUB, OPR_MUL, OPR_MOD, OPR_POW,    /*+ - * % ^ div*/
@@ -256,12 +261,13 @@ typedef enum BinOpr {
 typedef enum UnOpr { OPR_MINUS, OPR_BNOT, OPR_NOT, OPR_LEN, OPR_NOUNOPR } UnOpr;    /*-, ~, not, len, none*/
 
 
-
-
 int asC_codeABC(FuncState *fs, as_OpCode o, int a, int b, int c);
 int asC_codeABx(FuncState *fs, as_OpCode o, int a, unsigned int bx);
 
+#define asC_codeAsBx(fs, o, a, sbx) asC_codeABx(fs, o, a, sbx+OFFSET_sBx)   /*here we plus offset to ensure sbx
+                                                                                can be stored >0*/
 
+void asC_LOADNIL(FuncState *fs, int front, int n);
 
 
 
