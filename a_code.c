@@ -414,8 +414,46 @@ void asC_reserveReg(FuncState *fs, int n) {
 }
 
 
+/* Free register 'reg', if it is neither a constant index nor
+** a local variable
+*/
+
+static void freeReg(FuncState *fs, int reg) {
+
+    if (!ISK(reg) && reg >= fs->num_actVar) {
+        fs->freeReg--;
+        as_assert(fs->freeReg == reg);
+    }
+}
 
 
+/*Free register used by expression 'e' (if any)*/
+static void freeExp(FuncState *fs, ExpDesc *e) {
+
+    if (e->kind == EX_FIXED) {
+        freeReg(fs, e->u.info);
+    }    
+}
+
+
+
+
+
+
+/*
+** Add constant 'v' to prototype's list of constants (field 'k').
+** Use scanner's table to cache position of constants in constant list
+** and try to reuse constants. Because some values should not be used
+** as keys (nil cannot be a key, integer keys can collapse with float
+** keys), the caller must provide a useful 'key' for indexing the cache.
+*/
+
+
+static int addk(FuncState *fs, as_Value *key, as_Value *v) {
+
+    
+
+}
 
 
 

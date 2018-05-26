@@ -93,6 +93,7 @@ typedef enum {iABC, iABx, iAsBx, iAx} as_OpMode;  /* basic instruction format */
 #define NO_REG  MAXARG_A
 
 #define BITRK       (1 << (SIZE_B - 1)) /*this bit 1 means constant*/
+#define ISK(x)      ((x) & BITRK)   /*test whether value is constant*/
 #define RKMASK(x)   ((x) | BITRK)   /*code a constant to RK value*/
 #define INDEXK(e)   ((int)(e) & ~BITRK) /*get constant index form RK value*/
 

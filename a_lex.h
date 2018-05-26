@@ -76,9 +76,10 @@ typedef struct LexState {
     as_State *S;
     as_IO *io;
     as_Buffer *buffer;
+    as_Table *table;    /*table to avoid collecting*/
 
     as_String *source;
-
+    as_String *env;
 
 } LexState;
 
