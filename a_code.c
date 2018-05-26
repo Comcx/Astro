@@ -115,6 +115,7 @@ OpFormat(0, 1, OpArgU, OpArgN, iABC)    /*OP_VARARG*/
  */
 
 
+#define MAXREGS 255
 #define hasJump(e) ((e->t != (e)->f))
 
 
@@ -321,7 +322,7 @@ static void removeTestValue(FuncState *fs, int list) {
 }
 
 
-static void patchJumpListAux(FuncState *fs, int list, int reg, int target_value, 
+static void patchList(FuncState *fs, int list, int reg, int target_value, 
                                                     int target_default) {
 
     while (list != NO_JUMP) {
@@ -339,12 +340,83 @@ static void patchJumpListAux(FuncState *fs, int list, int reg, int target_value,
 }
 
 
-
+/*Make sure all pending jumps are fixed at current position*/
 static void dischargePC_J(FuncState *fs) {
 
-    patchJumpListAux(fs, fs->pc_j, NO_REG, fs->pc, fs->pc);
+    patchList(fs, fs->pc_j, NO_REG, fs->pc, fs->pc);
     fs->pc_j = NO_JUMP;
 }
+
+
+/*add jump list to here*/
+void asC_patchToHere(FuncState *fs, int list) {
+
+    asC_getLabel(fs);
+    asC_concatJumpList(fs, &fs->pc_j, list);
+}
+
+
+
+/*Patch jump list; if destination is current forward, error!*/
+void asC_patchJumpList(FuncState *fs, int list, int target) {
+
+    if (target == fs->pc) {
+        asC_patchToHere(fs, list);  /*target is current position*/
+    } else {
+        as_assert(target < fs->pc);
+        patchList(fs, list, NO_REG, target, target);
+    }
+}
+
+
+void asC_patchClose(FuncState *fs, int list, int level) {
+
+    /*unfinished!*/
+}
+
+
+
+
+
+/*
+** Create LOADK instruction, i.e. OP_LOADK
+ */
+
+int asC_LOADK(FuncState *fs, int reg, int k) {
+
+    if (k <= MAXARG_Bx) {
+        return asC_codeABx(fs, OP_LOADK, reg, k);
+    } else {    /*we haven't add extra argument instruction..., so as the same*/
+        return asC_codeABx(fs, OP_LOADK, reg, k);
+    }
+
+}
+
+
+/*Check whether stack is big enough*/
+void asC_checkStack(FuncState *fs, int n) {
+
+    int newStack = fs->freeReg + n;
+    if (newStack > fs->f->size_maxStack) {
+        if (newStack > MAXREGS) {
+            parseError(fs, "function or expression need too many registers");
+        }
+        fs->f->size_maxStack = cast(as_Byte, newStack);
+    }
+}
+
+
+/*Reserve register in stack*/
+void asC_reserveReg(FuncState *fs, int n) {
+
+    asC_checkStack(fs, n);
+    fs->freeReg += n;
+}
+
+
+
+
+
 
 
 

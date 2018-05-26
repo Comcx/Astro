@@ -274,6 +274,12 @@ void asC_LOADNIL(FuncState *fs, int front, int n);
 void asC_concatJumpList(FuncState *fs, int *l1, int l2);
 int asC_JMP(FuncState *fs);
 void asC_RETURN(FuncState *fs, int first, int num_ret);
+void asC_patchToHere(FuncState *fs, int list);
+void asC_patchJumpList(FuncState *fs, int list, int target);
+void asC_patchClose(FuncState *fs, int list, int level);
+void asC_LOADK(FuncState *fs, int reg, int k);
+void asC_checkStack(FuncState *fs, int n);
+void asC_reserveReg(FuncState *fs, int n);
 
 
 
