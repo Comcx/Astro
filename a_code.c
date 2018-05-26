@@ -399,7 +399,7 @@ void asC_checkStack(FuncState *fs, int n) {
     int newStack = fs->freeReg + n;
     if (newStack > fs->f->size_maxStack) {
         if (newStack > MAXREGS) {
-            parseError(fs, "function or expression need too many registers");
+            parseError(fs, "function or expression need too many registers", 0);
         }
         fs->f->size_maxStack = cast(as_Byte, newStack);
     }
