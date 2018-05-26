@@ -87,7 +87,8 @@ typedef struct FuncState {
 
 
 
-
+as_AClosure *asY_parser(as_State *S, as_IO *io, as_Buffer *buffer, 
+                        const char *name, int firstChar);
 
 
 

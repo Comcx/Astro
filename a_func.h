@@ -8,6 +8,20 @@
 
 
 
+typedef struct UpVal {
+
+    as_Value *v;
+    size_t count_ref;
+    union {
+        struct {
+            struct UpVal *next;
+            int touched;
+        } open;
+        as_Value value;
+    } u;
+
+} UpVal;
+
 
 
 

@@ -451,8 +451,10 @@ static void freeExp(FuncState *fs, ExpDesc *e) {
 
 static int addk(FuncState *fs, as_Value *key, as_Value *v) {
 
-    
+    as_State *S = fs->ls->S;
+    Proto *f = fs->f;
 
+    return 0;
 }
 
 
