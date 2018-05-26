@@ -90,6 +90,12 @@ typedef enum {iABC, iABx, iAsBx, iAx} as_OpMode;  /* basic instruction format */
 
 #define OFFSET_sBx       MAXARG_sBx
 
+#define NO_REG  MAXARG_A
+
+#define BITRK       (1 << (SIZE_B - 1)) /*this bit 1 means constant*/
+#define RKMASK(x)   ((x) | BITRK)   /*code a constant to RK value*/
+#define INDEXK(e)   ((int)(e) & ~BITRK) /*get constant index form RK value*/
+
 
 
 /* creates a mask with 'n' 1 bits at position 'p' */
@@ -99,8 +105,6 @@ typedef enum {iABC, iABx, iAsBx, iAx} as_OpMode;  /* basic instruction format */
 #define MASK0(n,p)  (~MASK1(n,p))
 
 
-
-#define NO_REG MAXARG_A
 
 
 
