@@ -126,11 +126,13 @@ static void parseError(FuncState *fs, const char *msg, int info) {
 }
 
 
+static void dischargePC_J(FuncState *fs);
+
 
 static int asC_code(FuncState *fs, Instruction i) {
 
     Proto *f = fs->f;
-    //dischargePC_J()
+    dischargePC_J(fs);
     /*put new instruction in code array*/
     asM_growVector(fs->ls->S, f->code, fs->pc, f->size_code, INT_MAX, Instruction);
     f->code[fs->pc] = i;
@@ -293,6 +295,64 @@ static Instruction *getJumpControl(FuncState *fs, int pc) {
 ** register. Otherwise, change instruction to a simple 'TEST' (produces
 ** no register value)
 */
+
+static int patchTestReg(FuncState *fs, int pc, int reg) {
+
+    Instruction *i = getJumpControl(fs, pc);
+    if (getOpCode(*i) != OP_TESTSET)
+        return 0;
+    if (reg != NO_REG && reg != getArg_B(*i)) {
+        setArg_A(*i, reg);
+    } else {
+        /*No register to put value or the register has been put*/
+        /*Change instruction to simple TEST*/
+        *i = create_ABC(OP_TEST, getArg_B(*i), 0, getArg_C(*i));
+    }
+    return 1;
+}
+
+
+/*Traverse list of TESTSET to TEST to ensure no value produced*/
+static void removeTestValue(FuncState *fs, int list) {
+
+    for (; list != NO_JUMP; list = getJumpDest(fs, list)) {
+        patchTestReg(fs, list, NO_REG);
+    }
+}
+
+
+static void patchJumpListAux(FuncState *fs, int list, int reg, int target_value, 
+                                                    int target_default) {
+
+    while (list != NO_JUMP) {
+    
+        int next = getJumpDest(fs, list);
+        if (patchTestReg(fs, list, reg)) {
+            setJumpDest(fs, list, target_value);
+        } else {
+            setJumpDest(fs, list, target_default);
+        }
+
+        list = next;
+    }
+
+}
+
+
+
+static void dischargePC_J(FuncState *fs) {
+
+    patchJumpListAux(fs, fs->pc_j, NO_REG, fs->pc, fs->pc);
+    fs->pc_j = NO_JUMP;
+}
+
+
+
+
+
+
+
+
 
 
 

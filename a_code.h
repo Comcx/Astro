@@ -100,6 +100,9 @@ typedef enum {iABC, iABx, iAsBx, iAx} as_OpMode;  /* basic instruction format */
 
 
 
+#define NO_REG MAXARG_A
+
+
 
 typedef enum {
 
