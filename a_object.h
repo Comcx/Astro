@@ -216,6 +216,7 @@ typedef struct Proto{
     GCHeader;
     as_Byte num_param;      /*number of parameters*/
     as_Byte size_maxStack;  /*max size of stack*/
+    as_Byte isVararg;
     int size_k;             /*size of consts*/
     int size_p;             /*size of p*/
     int size_UpVal;         /*size of upvals*/

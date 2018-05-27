@@ -1,14 +1,9 @@
-2333.2233
-2333
-0x01a.0
-'\'can you see \nme?\''
---"    is that hard ot say?
-    okok
-    quit?
-    see you later
-233"
 
 
-142857
-foo1
+local a = 2 + 3
+
+
+
+
+
 

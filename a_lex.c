@@ -4,6 +4,7 @@
 #include "a_lex.h"
 #include "a_debug.h"
 #include "a_object.h"
+#include "a_string.h"
 #include <limits.h>
 
 
@@ -23,6 +24,20 @@ static const char *asX_tokens[] = {
     "<number>", "<integer>", "<name>", "<string>"
 
 };
+
+
+int asX_isReserved(const char *str) {
+    
+    int i = 0;
+    for (; i < NUM_RESERVED; i++) {
+        if (strcmp(str, asX_tokens[i]) == 0) {
+            return i;
+        }
+    }
+
+    return 0;
+}
+
 
 
 void asX_setInput(as_State *S, LexState *ls, as_IO *io, as_String *source, int firstChar) {
@@ -335,6 +350,11 @@ static int lex(LexState *ls, SemInfo *seminfo) {
                         save_and_next(ls);
                     } while (as_isAlnum(ls->current));
                     save(ls, '\0');
+                    
+                    int reserved = asX_isReserved(ls->buffer->buffer);
+                    if (reserved) {
+                        return reserved + FIRST_RESERVED;
+                    }
 
                     return TK_NAME;
                 } else {
