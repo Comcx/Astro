@@ -74,6 +74,7 @@ typedef struct LexState {
     Token t_pre;
 
     as_State *S;
+    struct FuncState *fs;
     as_IO *io;
     as_Buffer *buffer;
     as_Table *table;    /*table to avoid collecting*/

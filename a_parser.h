@@ -59,6 +59,7 @@ typedef struct ExpDesc {
 
 
 
+struct Block;
 
 
 typedef struct FuncState {
@@ -66,7 +67,7 @@ typedef struct FuncState {
     Proto *f;   /*current function*/
     struct FuncState *prev; /*previous function*/
     struct LexState *ls;    /*lex*/
-    //struct BlockCnt *bl;
+    struct Block *bl;       /*chain of blocks*/
 
     int pc; /*next position to code*/
     int lastTarget; /*label of last jump label*/

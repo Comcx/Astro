@@ -4,11 +4,43 @@
 #include "a_debug.h"
 #include "a_func.h"
 #include "a_string.h"
+#include "a_code.h"
 
 
-static void openFunc(LexState *ls, FuncState *fs) {
+
+typedef struct Block {
+
+    struct Block *prev;
+    int firstLabel;
+    int firstGoto;
+    as_Byte num_actVar;
+    as_Byte hasUpVal;
+    as_Byte isLoop;
+
+} Block;
 
 
+
+
+
+static void openFunc(LexState *ls, FuncState *fs, Block *bl) {
+
+    Proto *f = fs->f;
+    fs->prev = ls->fs;
+    ls->fs = fs;
+    fs->pc = 0;
+    fs->lastTarget = 0;
+    fs->pc_j = NO_JUMP;
+    fs->freeReg = 0;
+    fs->num_k = 0;
+    fs->num_p = 0;
+    fs->num_UpVal = 0;
+    fs->num_LocVar = 0;
+    fs->num_actVar = 0;
+    fs->firstLocal = 0; /*this is unfinished!*/
+    fs->bl = NULL;
+    f->source = ls->source;
+    f->size_maxStack = 2;
 
 }
 
@@ -16,7 +48,9 @@ static void openFunc(LexState *ls, FuncState *fs) {
 
 static void mainFunc(LexState *ls, FuncState *fs) {
 
-    
+    Block bl;
+    ExpDesc e;
+    openFunc(ls, fs, &bl);
 
 }
 
