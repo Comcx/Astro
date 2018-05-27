@@ -8,10 +8,10 @@
 #include "a_state.h"
 #include <string.h>
 
-unsigned int ELFhash(char *str);
-unsigned int asS_hash(as_State *S, char *str);
+unsigned int ELFhash(const char *str);
+unsigned int asS_hash(as_State *S, const char *str);
 
-as_String *asS_newString(as_State *S, char *str);
+as_String *asS_newString(as_State *S, const char *str);
 as_String *asS_freeString(as_State *S, as_String *str);
 
 

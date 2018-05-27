@@ -7,7 +7,7 @@
 #include <stdio.h>
 
 
-unsigned int ELFhash(char *str) {
+unsigned int ELFhash(const char *str) {
 
     unsigned int hash = 0;
     unsigned int x = 0;
@@ -26,7 +26,7 @@ unsigned int ELFhash(char *str) {
 }
 
 
-unsigned int asS_hash(as_State *S, char *str) {
+unsigned int asS_hash(as_State *S, const char *str) {
 
     //printf(">>>%d\n", ELFhash(str));
     return ELFhash(str) % G(S)->strt.size;
@@ -35,7 +35,7 @@ unsigned int asS_hash(as_State *S, char *str) {
 
 
 
-int asS_equal(as_String *a, char *str) {
+int asS_equal(as_String *a, const char *str) {
 
 
     return strcmp(getstr(a), str) == 0;
@@ -43,7 +43,7 @@ int asS_equal(as_String *a, char *str) {
 
 
 
-as_String *asS_newString(as_State *S, char *str) {
+as_String *asS_newString(as_State *S, const char *str) {
     
     /*first we search global string table, if already exits, just return ptr*/
     unsigned int hash = asS_hash(S, str);//get hash

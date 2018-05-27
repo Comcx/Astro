@@ -8,7 +8,7 @@
 
 
 
-typedef struct UpVal {
+struct UpVal {
 
     as_Value *v;
     size_t count_ref;
@@ -20,7 +20,7 @@ typedef struct UpVal {
         as_Value value;
     } u;
 
-} UpVal;
+};
 
 
 
@@ -28,7 +28,8 @@ typedef struct UpVal {
 
 
 
-
+Proto *asF_newProto(as_State *S);
+as_AClosure *asF_newAClosure(as_State *S, int n);   /*n is not used right now*/
 
 
 

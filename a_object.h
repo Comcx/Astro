@@ -214,9 +214,10 @@ typedef struct UpValDesc {
 typedef struct Proto{
 
     GCHeader;
-    as_Byte num_params;     /*number of parameters*/
+    as_Byte num_param;      /*number of parameters*/
     as_Byte size_maxStack;  /*max size of stack*/
     int size_k;             /*size of consts*/
+    int size_p;             /*size of p*/
     int size_UpVal;         /*size of upvals*/
     int size_LocVar;        /*size of local vars*/
     int size_code;
@@ -227,6 +228,7 @@ typedef struct Proto{
     as_Value *k;            /*constants used by the function*/
     LocVar *locVar;         /*local vars*/
     UpValDesc *upVal;       /*upvalues*/
+    as_String *source;
 
     int *info_line;          /*line info for debug*/
 
@@ -242,8 +244,9 @@ typedef struct Proto{
 ** Astro Closure Object
  */
 
-#define ClosureHeader GCHeader; as_Byte num_upvalue; GCObject *gclist
+#define ClosureHeader GCHeader; as_Byte num_upval; GCObject *gclist
 
+typedef struct UpVal UpVal;
 
 typedef struct as_CClosure {
 
@@ -258,7 +261,7 @@ typedef struct as_AClosure {
 
     ClosureHeader;
     Proto *p;
-    
+    UpVal *upval[1];
 
 }as_AClosure;
 
@@ -282,12 +285,13 @@ typedef union as_Closure {
 struct GCObject {
 
     GCHeader;
+    /*
     union {
         as_String s;
         as_Closure cl;
         as_Table t;
     }val;
-
+    */
 };
 
 
