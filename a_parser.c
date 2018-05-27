@@ -21,6 +21,17 @@ typedef struct Block {
 
 
 
+static int testNext(LexState *ls, int ch) {
+
+    if (ls->current == ch) {
+        asX_next(ls);
+        return 1;
+    }
+    
+    else return 0;
+}
+
+
 
 static void initExp(ExpDesc *e, as_ExpKind k, int info) {
 
@@ -39,6 +50,11 @@ static int newUpVal(FuncState *fs, as_String *name, ExpDesc *e) {
     return fs->num_UpVal++;
 }
 
+
+static void newLocVar(LexState *ls, as_String *name) {
+
+    
+}
 
 
 static void enterBlock(FuncState *fs, Block *bl, as_Byte isLoop) {
@@ -85,7 +101,7 @@ static void closeFunc(LexState *ls) {
 }
 
 
-
+ 
 
 
 
@@ -107,10 +123,11 @@ static void localstat(LexState *ls) {
     int num_exp = 0;
 
     ExpDesc e;
+    /*read local vars*/
     do {
         
 
-    } while (0);
+    } while (testNext(ls, ','));
 
 }                                                      
 
