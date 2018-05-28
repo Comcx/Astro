@@ -53,6 +53,8 @@ static as_String *checkName(LexState *ls) {
     as_String *s;
     check(ls, TK_NAME);
 
+    //printf("%s\n\n", getstr(ls->t.semInfo.str));
+
     return ls->t.semInfo.str;
 }
 
@@ -96,10 +98,11 @@ static void newLocVar(LexState *ls, as_String *name) {
 
     FuncState *fs = ls->fs;
     DynData *dyd = ls->dyd;
-    
+   
     int reg = registerLocVar(ls, name);
-    asM_growVector(ls->S, dyd->actVar.index, dyd->actVar.n, dyd->actVar.size, INT_MAX, short);
+    asM_growVector(ls->S, dyd->actVar.index, dyd->actVar.n+1, dyd->actVar.size, INT_MAX, short);
     dyd->actVar.index[dyd->actVar.n++] = cast(short, reg);
+    //printf("dsgdsgsdg\n\n");
 }
 
 
@@ -171,11 +174,16 @@ static void localstat(LexState *ls) {
     ExpDesc e;
     /*read local vars*/
     do {
-        if (check(ls, TK_NAME)) {
-            //newLocVar(ls, );        
-        }
+        newLocVar(ls, checkName(ls));
+        num_var++;
 
     } while (testNext(ls, ','));
+
+    if (testNext(ls, '=')) {
+        
+    } else {
+    
+    }
 
 }                                                      
 
@@ -239,7 +247,7 @@ static void statement(LexState *ls) {
         case TK_LOCAL: {
             asX_next(ls);   /*skip 'local'*/
             localstat(ls);
-            printf("local\n\n..");
+            printf("local\n..");
             break;
         }
         case TK_DBCOLON: {
@@ -311,7 +319,7 @@ static void mainFunc(LexState *ls, FuncState *fs) {
     int test = asX_next(ls);
 
     printf("%s: %d\n", ls->buffer->buffer, test);
-    
+
     statlist(ls);
     //as_assert(ls->t.token == TK_EOS);
     closeFunc(ls);
@@ -325,6 +333,7 @@ as_AClosure *asY_parser(as_State *S, as_IO *io, as_Buffer *buffer,
     LexState lexState;
     FuncState funcState;
     DynData dyd;
+    dyd.actVar.index = asM_malloc(S, sizeof(short));
     as_AClosure *cl = asF_newAClosure(S, 1);
     funcState.f = asF_newProto(S);
     funcState.f->source = asS_newString(S, name);
@@ -353,6 +362,7 @@ as_AClosure *asY_parser(as_State *S, as_IO *io, as_Buffer *buffer,
     /*Since we haven't make use of GC system, we free spaces by hand*/
     funcState.f->source = asS_freeString(S, funcState.f->source);
     funcState.f = asM_free(S, funcState.f);
+    dyd.actVar.index = asM_free(S, dyd.actVar.index);
 
     return cl;
 }

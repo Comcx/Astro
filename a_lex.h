@@ -91,6 +91,7 @@ typedef struct LexState {
 void asX_setInput(as_State *S, LexState *ls, as_IO *io, as_String *source, int firstChar);
 //void asX_next(as_State *S);
 
+as_String *asX_newString(LexState *S, const char *str);
 const char *asX_token2str(LexState *ls, int token);
 int asX_next(LexState *ls);
 

@@ -39,6 +39,14 @@ int asX_isReserved(const char *str) {
 }
 
 
+as_String *asX_newString(LexState *ls, const char *str) {
+
+    as_State *S = ls->S;
+    as_String *s = asS_newString(S, str);
+
+    return s;
+}
+
 
 void asX_setInput(as_State *S, LexState *ls, as_IO *io, as_String *source, int firstChar) {
 
@@ -355,6 +363,8 @@ static int lex(LexState *ls, SemInfo *seminfo) {
                     if (reserved) {
                         return reserved + FIRST_RESERVED;
                     }
+                    as_String *ts = asX_newString(ls, ls->buffer->buffer);
+                    seminfo->str = ts;
 
                     return TK_NAME;
                 } else {
