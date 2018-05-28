@@ -58,6 +58,19 @@ typedef struct ExpDesc {
 } ExpDesc;
 
 
+typedef struct DynData {
+
+    struct {
+        short *index;
+        int n;
+
+    } actVar;
+
+} DynData;
+
+
+
+
 
 struct Block;
 

@@ -21,6 +21,10 @@ typedef struct Block {
 
 
 
+
+
+
+
 static int testNext(LexState *ls, int ch) {
 
     if (ls->current == ch) {
@@ -51,9 +55,29 @@ static int newUpVal(FuncState *fs, as_String *name, ExpDesc *e) {
 }
 
 
+static void registerLocVar(LexState *ls, as_String *name) {
+
+    FuncState *fs = ls->fs;
+    Proto *f = fs->f;
+    int size_old = f->size_LocVar;
+
+    asM_growVector(ls->S, f->locVar, fs->num_LocVar, f->size_LocVar, SHRT_MAX, LocVar);
+    while (size_old < f->size_LocVar) {
+        f->locVar[size_old++].name = NULL;
+
+    }
+    f->locVar[fs->num_LocVar].name = name;
+
+    return fs->num_LocVar++;
+}
+
+
 static void newLocVar(LexState *ls, as_String *name) {
 
+    FuncState *fs = ls->fs;
+    DynData *dyd = ls->dyd;
     
+
 }
 
 
@@ -276,10 +300,13 @@ as_AClosure *asY_parser(as_State *S, as_IO *io, as_Buffer *buffer,
 
     LexState lexState;
     FuncState funcState;
+    DynData dyd;
     as_AClosure *cl = asF_newAClosure(S, 1);
     funcState.f = asF_newProto(S);
     funcState.f->source = asS_newString(S, name);
     lexState.buffer = buffer;
+    lexState.dyd = &dyd;
+    dyd.actVar.n = 0; 
 
     asX_setInput(S, &lexState, io, funcState.f->source, firstChar);
 

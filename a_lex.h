@@ -75,6 +75,7 @@ typedef struct LexState {
 
     as_State *S;
     struct FuncState *fs;
+    struct DynData *dyd;
     as_IO *io;
     as_Buffer *buffer;
     as_Table *table;    /*table to avoid collecting*/
