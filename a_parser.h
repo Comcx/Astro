@@ -99,7 +99,7 @@ typedef struct FuncState {
 
 
 
-
+void asY_debugParser(FuncState *fs);
 
 as_AClosure *asY_parser(as_State *S, as_IO *io, as_Buffer *buffer, 
                         const char *name, int firstChar);

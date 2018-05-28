@@ -30,7 +30,7 @@ int main(int argc, char *argv[]) {
     
     
     FILE *file;
-    file = fopen("test.txt", "r");
+    file = fopen("test.as", "r");
 
     FileLoader fl;
     fl.file = file;

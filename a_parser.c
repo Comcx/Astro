@@ -28,18 +28,36 @@ static void parseError(FuncState *fs, const char *msg, int info) {
 } 
 
 
+void asY_debugParser(FuncState *fs) {
+
+    printf("\n------------------debug parser----------------\n");
+    printf("pc:\t%d\n", fs->pc);
+    printf("lastTarget:\t%d\n", fs->lastTarget);
+    printf("pc_j:\t%d\n", fs->pc_j);
+    printf("num_k:\t%d\nnum_p:\t%d\n", fs->num_k, fs->num_p);
+    printf("num_absLineInfo:\t%d\n", fs->num_absLineInfo);
+    printf("firstLocal:\t%d\n", fs->firstLocal);
+    printf("num_LocVar:\t%d\n", fs->num_LocVar);
+    printf("num_actVar:\t%d\n", fs->num_actVar);
+    printf("num_UpVal:\t%d\n", fs->num_UpVal);
+    printf("freeReg:;\t%d\n", fs->freeReg);
+    //printf("");
+    printf("-----------------------end---------------------\n");
+}
+
 
 static int check(LexState *ls, int ch) {
 
     if (ls->t.token != ch) {
-        parseError(ls->fs, "token not matched!", ch);
+        parseError(ls->fs, "token not matched!", ls->t.token);
     }
 }
 
 
 static int testNext(LexState *ls, int ch) {
 
-    if (ls->current == ch) {
+    if (ls->t.token == ch) {
+
         asX_next(ls);
         return 1;
     }
@@ -52,9 +70,8 @@ static as_String *checkName(LexState *ls) {
 
     as_String *s;
     check(ls, TK_NAME);
-
-    //printf("%s\n\n", getstr(ls->t.semInfo.str));
-
+    
+    asX_next(ls);
     return ls->t.semInfo.str;
 }
 
@@ -84,6 +101,7 @@ static int registerLocVar(LexState *ls, as_String *name) {
     int size_old = f->size_LocVar;
 
     asM_growVector(ls->S, f->locVar, fs->num_LocVar, f->size_LocVar, SHRT_MAX, LocVar);
+
     while (size_old < f->size_LocVar) {
         
         f->locVar[size_old++].name = NULL;
@@ -102,8 +120,28 @@ static void newLocVar(LexState *ls, as_String *name) {
     int reg = registerLocVar(ls, name);
     asM_growVector(ls->S, dyd->actVar.index, dyd->actVar.n+1, dyd->actVar.size, INT_MAX, short);
     dyd->actVar.index[dyd->actVar.n++] = cast(short, reg);
-    //printf("dsgdsgsdg\n\n");
 }
+
+
+static LocVar *getLocVar(FuncState *fs, int i) {
+
+    int index = fs->ls->dyd->actVar.index[fs->firstLocal + i];
+    as_assert(index < fs->num_LocVar);
+
+    return &fs->f->locVar[index];
+}
+
+
+static void adjustLocVar(LexState *ls, int num_var) {
+
+    FuncState *fs = ls->fs;
+    fs->num_actVar = cast(as_Byte, fs->num_actVar + num_var);
+    for (; num_var; num_var--) {
+
+        getLocVar(fs, fs->num_LocVar - num_var)->p_start = fs->pc;
+    }
+}
+
 
 
 static void enterBlock(FuncState *fs, Block *bl, as_Byte isLoop) {
@@ -124,6 +162,7 @@ static void openFunc(LexState *ls, FuncState *fs, Block *bl) {
     Proto *f = fs->f;
     fs->prev = ls->fs;
     ls->fs = fs;
+    fs->ls = ls;
     fs->pc = 0;
     fs->lastTarget = 0;
     fs->pc_j = NO_JUMP;
@@ -164,6 +203,61 @@ static void closeFunc(LexState *ls) {
 
 
 
+static const struct {
+
+    as_Byte left;  /* left priority for each binary operator */
+    as_Byte right; /* right priority */
+
+} priority[] = {  /* ORDER OPR */
+
+    {10, 10}, {10, 10},           /* '+' '-' */
+    {11, 11}, {11, 11},           /* '*' '%' */
+    {14, 13},                  /* '^' (right associative) */
+    {11, 11}, {11, 11},           /* '/' '//' */
+    {6, 6}, {4, 4}, {5, 5},   /* '&' '|' '~' */
+    {7, 7}, {7, 7},           /* '<<' '>>' */
+    {9, 8},                   /* '..' (right associative) */
+    {3, 3}, {3, 3}, {3, 3},   /* ==, <, <= */
+    {3, 3}, {3, 3}, {3, 3},   /* ~=, >, >= */
+    {2, 2}, {1, 1}            /* and, or */
+};
+
+#define UNARY_PRIORITY    12  /* priority for unary operators */
+
+
+
+
+
+
+
+static BinOpr subexpr(LexState *ls, ExpDesc *e, int limit) {
+    
+    BinOpr op;
+    UnOpr uop;
+
+
+    return 0;
+}
+
+
+
+static void expr(LexState *ls, ExpDesc *e) {
+
+    subexpr(ls, e, 0);
+}
+
+
+
+static int explist(LexState *ls, ExpDesc *e) {
+
+    /* explist -> expr { ',' expr } */
+    int n = 1;  /*at least 1 expression*/
+
+
+    return 0;
+}
+
+
 
 static void localstat(LexState *ls) {
 
@@ -174,6 +268,7 @@ static void localstat(LexState *ls) {
     ExpDesc e;
     /*read local vars*/
     do {
+        //printf("local test %d\n", ls->t.token);
         newLocVar(ls, checkName(ls));
         num_var++;
 
@@ -184,7 +279,10 @@ static void localstat(LexState *ls) {
     } else {
     
     }
+    
 
+    adjustLocVar(ls, num_var);
+    asY_debugParser(ls->fs);
 }                                                      
 
 
@@ -216,38 +314,38 @@ static void statement(LexState *ls) {
         }
         case TK_IF: {
             
-            printf("if\n");
+            printf("ifstat\n");
             break;
         }
         case TK_WHILE: {
             
-            printf("while\n");
+            printf("whilestate\n");
             break;
         }
         case TK_DO: {
             
-            printf("do\n");
+            printf("dostat\n");
             break;
         }
         case TK_FOR: {
             
-            printf("for\n");
+            printf("forstat\n");
             break;
         }
         case TK_REPEAT: {
             
-            printf("repeat\n");
+            printf("repeatstat\n");
             break;
         }
         case TK_FUNCTION: {
             
-            printf("function");
+            printf("funcstat\n");
             break;
         }
         case TK_LOCAL: {
             asX_next(ls);   /*skip 'local'*/
             localstat(ls);
-            printf("local\n..");
+            printf("localstat\n");
             break;
         }
         case TK_DBCOLON: {
@@ -257,7 +355,7 @@ static void statement(LexState *ls) {
         }
         case TK_RETURN: {
             
-            printf("return");
+            printf("retstat");
             break;
         }
         case TK_BREAK: {
@@ -319,7 +417,7 @@ static void mainFunc(LexState *ls, FuncState *fs) {
     int test = asX_next(ls);
 
     printf("%s: %d\n", ls->buffer->buffer, test);
-
+    asY_debugParser(fs);
     statlist(ls);
     //as_assert(ls->t.token == TK_EOS);
     closeFunc(ls);
@@ -333,7 +431,7 @@ as_AClosure *asY_parser(as_State *S, as_IO *io, as_Buffer *buffer,
     LexState lexState;
     FuncState funcState;
     DynData dyd;
-    dyd.actVar.index = asM_malloc(S, sizeof(short));
+    //dyd.actVar.index = asM_malloc(S, sizeof(short));
     as_AClosure *cl = asF_newAClosure(S, 1);
     funcState.f = asF_newProto(S);
     funcState.f->source = asS_newString(S, name);
@@ -362,7 +460,7 @@ as_AClosure *asY_parser(as_State *S, as_IO *io, as_Buffer *buffer,
     /*Since we haven't make use of GC system, we free spaces by hand*/
     funcState.f->source = asS_freeString(S, funcState.f->source);
     funcState.f = asM_free(S, funcState.f);
-    dyd.actVar.index = asM_free(S, dyd.actVar.index);
+    //dyd.actVar.index = asM_free(S, dyd.actVar.index);
 
     return cl;
 }

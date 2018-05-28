@@ -31,8 +31,9 @@ void *asM_reallocVector(as_State *S, void *ptr, size_t size_new, size_t limit);
     cast(t *, ((S)->G->fn_alloc(NULL, sizeof(t), 0, num)))
 #define asM_growVector(S, ptr, num_element, size, limit, t)  \
                                 if ((num_element)+1 > (size)) \
-                                {(ptr) = cast(t*, asM_reallocVector(S, ptr, size*2*sizeof(t)+1, limit)); \
-                                 (size) = (size) * 2 + 1;}
+                                {if (size == 0) {(ptr) = cast(t*, asM_malloc(S, sizeof(t)));size++;} else {\
+                                (ptr) = cast(t*, asM_reallocVector(S, ptr, size*2*sizeof(t), limit)); \
+                                 (size) = (size) * 2;} }
 
 
 #endif
