@@ -21,8 +21,20 @@ typedef struct Block {
 
 
 
+static void parseError(FuncState *fs, const char *msg, int info) {
+
+    printf("Parser error with %d, %s", info, msg);
+    exit(-1);
+} 
 
 
+
+static int check(LexState *ls, int ch) {
+
+    if (ls->t.token != ch) {
+        parseError(ls->fs, "token not matched!", ch);
+    }
+}
 
 
 static int testNext(LexState *ls, int ch) {
@@ -35,6 +47,14 @@ static int testNext(LexState *ls, int ch) {
     else return 0;
 }
 
+
+static as_String *checkName(LexState *ls) {
+
+    as_String *s;
+    check(ls, TK_NAME);
+
+    return ls->t.semInfo.str;
+}
 
 
 static void initExp(ExpDesc *e, as_ExpKind k, int info) {
@@ -55,7 +75,7 @@ static int newUpVal(FuncState *fs, as_String *name, ExpDesc *e) {
 }
 
 
-static void registerLocVar(LexState *ls, as_String *name) {
+static int registerLocVar(LexState *ls, as_String *name) {
 
     FuncState *fs = ls->fs;
     Proto *f = fs->f;
@@ -63,8 +83,8 @@ static void registerLocVar(LexState *ls, as_String *name) {
 
     asM_growVector(ls->S, f->locVar, fs->num_LocVar, f->size_LocVar, SHRT_MAX, LocVar);
     while (size_old < f->size_LocVar) {
+        
         f->locVar[size_old++].name = NULL;
-
     }
     f->locVar[fs->num_LocVar].name = name;
 
@@ -77,7 +97,9 @@ static void newLocVar(LexState *ls, as_String *name) {
     FuncState *fs = ls->fs;
     DynData *dyd = ls->dyd;
     
-
+    int reg = registerLocVar(ls, name);
+    asM_growVector(ls->S, dyd->actVar.index, dyd->actVar.n, dyd->actVar.size, INT_MAX, short);
+    dyd->actVar.index[dyd->actVar.n++] = cast(short, reg);
 }
 
 
@@ -149,7 +171,9 @@ static void localstat(LexState *ls) {
     ExpDesc e;
     /*read local vars*/
     do {
-        
+        if (check(ls, TK_NAME)) {
+            //newLocVar(ls, );        
+        }
 
     } while (testNext(ls, ','));
 

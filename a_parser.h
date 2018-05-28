@@ -63,7 +63,7 @@ typedef struct DynData {
     struct {
         short *index;
         int n;
-
+        int size;
     } actVar;
 
 } DynData;

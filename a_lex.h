@@ -50,7 +50,7 @@ typedef struct SemInfo {
 
     as_Number r;
     as_Integer i;
-    as_String str;
+    as_String *str;
 
 } SemInfo;
 
