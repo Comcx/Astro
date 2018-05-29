@@ -306,6 +306,9 @@ struct GCObject {
 
 
 
+const as_Value asO_nilObject;
+#define as_Nil (&asO_nilObject)
+
 
 /*Functions for objects*/
 void printObject(as_Value *v);

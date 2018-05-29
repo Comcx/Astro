@@ -3,7 +3,22 @@
 #include "a_table.h"
 #include "a_mem.h"
 #include "a_object.h"
+#include "a_string.h"
 #include "a_debug.h"
+
+
+
+int hashString(const char *str) {
+
+    
+
+}
+
+
+int hashInt(as_Integer i) {
+
+
+}
 
 
 as_Table *asT_new(as_State *S, int flag_array, int flag_dict, int size_array, int size_dict) {
@@ -35,12 +50,64 @@ as_Table *asT_new(as_State *S, int flag_array, int flag_dict, int size_array, in
 
 
 
+const as_Value *asT_getInt(as_Table *t, as_Integer key) {
+
+    if (t->flag_array && cast(as_Unsigned, key) < t->size_array) {
+    
+        return &t->array[key];  /*found in array part*/
+    } else {    /*element is in dict?*/
+    
+        if (!t->flag_dict)  /*no dict?*/
+            return as_Nil;
+        /*search in node(dict)*/
+
+    }
+
+}
+
+
+const as_Value *asT_getShortStr(as_Table *t, const char *key) {
+
+
+
+}
+
+
+const as_Value *asT_getGeneric(as_Table *t, as_Value *key) {
+
+
+
+}
+
+
+const as_Value *asT_get(as_Table *t, as_Value *key) {
+
+    switch (getTypeWithVar(key)) {
+    
+        case AS_TNUMINT: return asT_getInt(t, intValue(key));
+        case AS_TNUMFLT: {
+            printf("Table index can not be float!\n");
+            exit(-1);
+        }
+        case AS_TSHTSTR: return asT_getShortStr(t, strValue(key));
+        case AS_TLNGSTR: return as_Nil; /*unfinished!*/
+        case AS_TNIL:   return as_Nil;
+        default: {
+            return asT_getGeneric(t, key);
+        }
+    }
+
+}
+
+
+
 as_Value *asT_set(as_State *S, as_Table *t, as_Value *key) {
 
-    
-
-
-    return key;
+    const as_Value *ans = asT_get(t, key);
+    if (ans != as_Nil ) {
+        return cast(as_Value*, ans);
+    }
+    else return key;
 }
 
 

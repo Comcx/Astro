@@ -7,6 +7,14 @@
 #include "a_state.h"
 
 
+
+
+#define getNode(t, i) (&(t)->node[i])
+#define getNodeValue(n) (&(n)->val)
+#define getNodeNext(n) ((n)->key.next)
+
+
+
 as_Table *asT_new(as_State *S, int flag_array, int flag_dict, int size_array, int size_dict);
 
 #define asT_newArray(S, size_array) asT_new(S, 1, 0, size_array, 0)
