@@ -12,6 +12,7 @@
 #include "a_gc.h"
 #include "a_func.h"
 #include "a_parser.h"
+#include "a_vm.h"
 #include <stdlib.h>
 
 
@@ -39,44 +40,17 @@ int main(int argc, char *argv[]) {
     as_IO io;
     asI_init(S, &io, asU_read, &fl);
 
-    //LexState ls;
-    
-    //asX_setInput(S, &ls, &io, str, asI_fill(&io));
-    
-    //const char *buff = asU_read(S, &size, &fl);
     as_Buffer *buffer = asM_malloc(S, sizeof(as_Buffer));
     asI_resizeBuffer(S, buffer, 512);
 
-    as_AClosure *cl = asY_parser(S, &io, buffer, "ENV", asI_fill(&io));
+    //as_AClosure *cl = asY_parser(S, &io, buffer, "ENV", asI_fill(&io));
     
-        
+
+    //cl = asM_free(S, cl);
 
 
 
 
-
-
-    cl = asM_free(S, cl);
-
-
-
-
-
-    /*
-    asX_next(&ls);
-    printf("%lf\n", ls.t.semInfo.r);
-
-    asX_next(&ls);
-    printf("%d\n", ls.t.semInfo.i);
-    
-    asX_next(&ls);
-    printf("%lf\n", ls.t.semInfo.r);
-
-    asX_next(&ls);
-    printf("%s\n", ls.buffer->buffer);
-    //printf("%d\n", ls.t.semInfo.i);
-    */
-    
 
     fclose(file);
 

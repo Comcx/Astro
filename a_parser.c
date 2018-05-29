@@ -66,7 +66,7 @@ static int testNext(LexState *ls, int ch) {
 }
 
 
-static as_String *checkName(LexState *ls) {
+static as_String *checkNameNext(LexState *ls) {
 
     as_String *s;
     check(ls, TK_NAME);
@@ -269,7 +269,7 @@ static void localstat(LexState *ls) {
     /*read local vars*/
     do {
         //printf("local test %d\n", ls->t.token);
-        newLocVar(ls, checkName(ls));
+        newLocVar(ls, checkNameNext(ls));
         num_var++;
 
     } while (testNext(ls, ','));

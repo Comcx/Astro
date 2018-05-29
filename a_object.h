@@ -30,7 +30,7 @@
 #define AS_TSHTSTR (AS_TSTRING | (0 << 4))
 #define AS_TLNGSTR (AS_TSTRING | (1 << 4))
 
-#define AS_TMUNFLT (AS_TNUMBER | (0 << 4))
+#define AS_TNUMFLT (AS_TNUMBER | (0 << 4))
 #define AS_TNUMINT (AS_TNUMBER | (1 << 4))
 
 
@@ -107,6 +107,15 @@ typedef struct as_Value {
 #define setObj(S, obj1, obj2) \
     {as_Value *o = (obj1); *o = *(obj2); \
      (void)S; }
+
+
+#define intValue(obj) (getValue(obj).i)
+#define fltValue(obj)  (getValue(obj).n)
+#define strValue(obj)  (getstr(getValue(obj).gc))
+#define boolValue(obj) (getValue(obj).b)
+#define tableValue(obj) (obj)
+#define clValue(obj) (obj)
+
 
 
 

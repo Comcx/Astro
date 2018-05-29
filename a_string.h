@@ -10,6 +10,7 @@
 
 unsigned int ELFhash(const char *str);
 unsigned int asS_hash(as_State *S, const char *str);
+int asS_equal(as_String *s, const char *str);
 
 as_String *asS_newString(as_State *S, const char *str);
 as_String *asS_freeString(as_State *S, as_String *str);

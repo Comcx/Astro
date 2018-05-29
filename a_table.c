@@ -34,6 +34,17 @@ as_Table *asT_new(as_State *S, int flag_array, int flag_dict, int size_array, in
 }
 
 
+
+as_Value *asT_set(as_State *S, as_Table *t, as_Value *key) {
+
+    
+
+
+    return key;
+}
+
+
+
 void debug_Table(as_Table *t) {
 
     if (t->flag_array && t->flag_dict) {
