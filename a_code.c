@@ -1,6 +1,7 @@
 
 #include "a_code.h"
 #include "a_debug.h"
+#include "a_vm.h"
 
 #include <math.h>
 
@@ -449,13 +450,61 @@ static void freeExp(FuncState *fs, ExpDesc *e) {
 */
 
 
-static int addk(FuncState *fs, as_Value *key, as_Value *v) {
+static int add2k(FuncState *fs, as_Value *key, as_Value *v) {
 
     as_State *S = fs->ls->S;
     Proto *f = fs->f;
 
-    return 0;
+    as_Value *index = asT_set(S, fs->ls->table, key);
+    int index_k, size_old;
+    if (typeIsInteger(index)) {
+        index_k = cast(int, intValue(index));
+        /*check index_k is correct index of k*/
+        if (index_k < fs->num_k && 
+            getTypeWithVar(&f->k[index_k]) == getTypeWithVar(v) && 
+            asV_objectEqual(&f->k[index_k], v)) {
+        
+            return index_k; /*reuse index*/
+        }
+    }
+
+    /*constant not found*/
+    size_old = fs->size_k;
+    index_k = fs->num_k;
+
+    /*set value to cache table*/
+    setInteger(index, index_k);
+    asM_growVector(S, f->k, fs->num_k, fs->size_k, MAXARG_Bx, as_Value);
+    while (size_old < fs->size_k) setNil(&f->k[size_old++]);
+    setObj(S, &f->k[index_k], v);
+    fs->num_k++;
+
+    return index_k;
 }
+
+
+
+/*
+** Add a string to list of constants and return its index.
+*/
+int asC_string2k(FuncState *fs, as_String *s) {
+
+    as_Value o;
+    setString(fs->ls->S, &o, s);
+    return add2k(fs, &o, &o);
+}
+
+
+/*
+** Add an integer to list of constants and return its index.
+** Integers use userdata as keys to avoid collision with floats with
+** same value; conversion to 'void*' is used only for hashing, so there
+** are no "precision" problems.
+*/
+
+
+
+
 
 
 

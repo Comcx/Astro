@@ -86,6 +86,7 @@ typedef struct as_Value {
 #define typeIsString(o) (getTypeNoVar(o) == AS_TSTRING)
 
 #define setType(o, t) ((o)->type = (t))
+#define setNil(o) (setType(o, AS_TNIL))
 #define setNumber(o, x) \
     {as_Value *o_ = (o); getValue(o_).n = x; setType(o_, AS_TNUMBER);}
 #define setInteger(o, integer) \

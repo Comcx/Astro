@@ -107,7 +107,7 @@ as_Value *asT_set(as_State *S, as_Table *t, as_Value *key) {
     if (ans != as_Nil ) {
         return cast(as_Value*, ans);
     }
-    else return key;
+    else return cast(as_Value*, as_Nil);
 }
 
 
