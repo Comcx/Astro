@@ -268,6 +268,9 @@ typedef enum BinOpr {
 
 typedef enum UnOpr { OPR_MINUS, OPR_BNOT, OPR_NOT, OPR_LEN, OPR_NOUNOPR } UnOpr;    /*-, ~, not, len, none*/
 
+
+#define instructionOfExp(fs, e) ((fs)->f->code[(e)->u.info])
+
 void asC_printInstruction(int i);
 
 int asC_codeABC(FuncState *fs, as_OpCode o, int a, int b, int c);
@@ -286,7 +289,11 @@ void asC_patchClose(FuncState *fs, int list, int level);
 int asC_LOADK(FuncState *fs, int reg, int k);
 void asC_checkStack(FuncState *fs, int n);
 void asC_reserveReg(FuncState *fs, int n);
-
+int asC_string2k(FuncState *fs, as_String *s);
+int asC_int2k(FuncState *fs, as_Integer i);
+int asC_number2k(FuncState *fs, as_Number n);
+int asC_bool2k(FuncState *fs, int b);
+int asC_nil2k(FuncState *fs);
 
 
 

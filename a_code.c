@@ -1,6 +1,7 @@
 
 #include "a_code.h"
 #include "a_debug.h"
+#include "a_table.h"
 #include "a_vm.h"
 
 #include <math.h>
@@ -469,13 +470,13 @@ static int add2k(FuncState *fs, as_Value *key, as_Value *v) {
     }
 
     /*constant not found*/
-    size_old = fs->size_k;
+    size_old = f->size_k;
     index_k = fs->num_k;
 
     /*set value to cache table*/
     setInteger(index, index_k);
-    asM_growVector(S, f->k, fs->num_k, fs->size_k, MAXARG_Bx, as_Value);
-    while (size_old < fs->size_k) setNil(&f->k[size_old++]);
+    asM_growVector(S, f->k, fs->num_k, f->size_k, MAXARG_Bx, as_Value);
+    while (size_old < f->size_k) setNil(&f->k[size_old++]);
     setObj(S, &f->k[index_k], v);
     fs->num_k++;
 
@@ -497,11 +498,149 @@ int asC_string2k(FuncState *fs, as_String *s) {
 
 /*
 ** Add an integer to list of constants and return its index.
-** Integers use userdata as keys to avoid collision with floats with
-** same value; conversion to 'void*' is used only for hashing, so there
-** are no "precision" problems.
+*/
+int asC_int2k(FuncState *fs, as_Integer i) {
+
+    as_Value o;
+    setInteger(&o, i);
+    return add2k(fs, &o, &o);
+}
+
+
+/*
+** Add a float to list of constants and return its index.
+*/
+int asC_number2k(FuncState *fs, as_Number n) {
+
+    as_Value o;
+    setNumber(&o, n);
+    return add2k(fs, &o, &o);
+}
+
+
+
+/*
+** Add a boolean to list of constants and return its index.
+*/
+int asC_bool2k(FuncState *fs, int b) {
+
+    as_Value o;
+    setBoolean(&o, b);
+    return add2k(fs, &o, &o);
+}
+
+
+/*
+** Add nil to list of constants and return its index.
+*/
+int asC_nil2k(FuncState *fs) {
+
+    
+}
+
+
+/*
+** Fix an expression to return the number of results 'nresults'.
+** Either 'e' is a multi-ret expression (function call or vararg)
+** or 'nresults' is LUA_MULTRET (as any expression can satisfy that).
 */
 
+void asC_setReturn(FuncState *fs, ExpDesc *e, int num_ret) {
+
+    if (e->kind == EX_CALL) {
+    
+        setArg_C(instructionOfExp(fs, e), num_ret);        
+    }
+    else if (e->kind == EX_VARARG) {/*unfinished!*/
+    
+        parseError(fs, "vararg function not finished!", 0);
+    }
+
+}
+
+
+
+
+/*
+** Ensure that expression 'e' is not a variable.
+*/
+
+void asC_dischargeVar(FuncState *fs, ExpDesc *e) {
+
+    switch (e->kind) {
+    
+        case EX_LOCAL: {
+            e->kind = EX_FIXED;
+            break;
+        }
+        case EX_UPVAL: {
+            e->u.info = asC_codeABC(fs, OP_GETUPVAL, 0, e->u.info, 0);
+            e->kind = EX_FIXABLE;
+            break;
+        }
+        case EX_INDEXED: {
+            as_OpCode op;
+            parseError(fs, "indexed expression function in discharging var not finished!", 0);
+
+            break;
+        }
+        case EX_CALL: case EX_VARARG: {
+            
+            parseError(fs, "call exp function in discharing var not finished!", 0);
+            break;
+        }
+        default: break;
+    }
+
+}
+
+
+/*
+** Ensures expression value is in register 'reg' (and therefore
+** 'e' will become a non-relocatable expression).
+*/
+static void discharge2Reg(FuncState *fs, ExpDesc *e, int reg) {
+
+    asC_dischargeVar(fs, e);
+    switch (e->kind) {
+    
+        case EX_NIL: {
+            asC_LOADNIL(fs, reg, 1);
+            break;
+        }
+        case EX_TRUE: case EX_FALSE: {
+            asC_codeABC(fs, OP_LOADBOOL, reg, e->kind == EX_TRUE, 0);
+            break;
+        }
+        case EX_K: {
+            asC_LOADK(fs, reg, e->u.info);
+            break;
+        }
+        case EX_FLT: {
+            asC_LOADK(fs, reg, asC_number2k(fs, e->u.n));
+            break;
+        }
+        case EX_INT: {
+            asC_LOADK(fs, reg, asC_int2k(fs, e->u.i));
+            break;
+        }
+        case EX_FIXABLE: {
+            
+            break;
+        }
+        case EX_FIXED: {
+        
+            break;
+        }
+        default: {
+            as_assert(e->kind == EX_JMP);
+            return;
+        }
+    }
+
+    e->u.info = reg;
+    e->kind - EX_FIXED;
+}
 
 
 
