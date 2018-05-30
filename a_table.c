@@ -12,7 +12,7 @@
 #define hashNumber(t, n) (getNode(t, ((n) % ((size_node(t)-1) | 1))))
 #define hashString(t, s) hashPow2(t, s)
 #define hashBool(t, b) hashPow2(t, b)
-#define hashPointer(t, p) hashNumber(t, cast(unsigned int, p))
+#define hashPointer(t, p) hashNumber(t, pointer2uint(p))
 
 
 
@@ -86,9 +86,18 @@ const as_Value *asT_getInt(as_Table *t, as_Integer key) {
         if (!t->flag_dict)  /*no dict?*/
             return as_Nil;
         /*search in node(dict)*/
-
+        as_Node *node = hashInt(t, key);
+        for (;;) {  /*check if in somewhere in the chain*/
+            if (typeIsInteger(getKey(node)) && intValue(getKey(node)) == key) {
+                return getNodeValue(node);
+            }
+            int offset_next = getNodeNext(node);
+            if (offset_next == 0) break;
+            node += offset_next;
+        }
     }
-
+    
+    return as_Nil;
 }
 
 

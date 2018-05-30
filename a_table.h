@@ -11,6 +11,7 @@
 
 #define getNode(t, i) (&(t)->node[i])
 #define getNodeValue(n) (&(n)->val)
+#define getKey(n) (cast(const as_Value*, (&(n->key.val))))
 #define getNodeNext(n) ((n)->key.next)
 
 

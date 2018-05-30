@@ -133,7 +133,7 @@ typedef as_Value* StkId;
 typedef struct as_Key {
 
     as_Value val;
-    struct as_Node *next;
+    int next;
 
 }as_Key;
 

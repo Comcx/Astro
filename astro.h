@@ -92,7 +92,7 @@ typedef const char* (*as_Reader)(as_State *S, size_t *sz, void *ud);
 
 #define cast(t, o) ((t)(o))
 #define cast_uchar(o) ((unsigned char)(o))
-
+#define pointer2uint(p) ((unsigned int)((size_t)(p) & UINT_MAX))
 
 
 
