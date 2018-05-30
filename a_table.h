@@ -23,6 +23,7 @@ as_Table *asT_new(as_State *S, int flag_array, int flag_dict, int size_array, in
 #define asT_newTable(S, size_array, size_dict) asT_new(S, 1, 1, size_array, size_dict)
 
 
+const as_Value *asT_get(as_Table *t, as_Value *key);
 as_Value *asT_set(as_State *S, as_Table *t, as_Value *key);
 
 as_Table *asT_free(as_State *S, as_Table *t);

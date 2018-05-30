@@ -7,6 +7,9 @@
 #include "a_debug.h"
 
 
+
+
+
 #define hashPow2(t, n) (getNode(t, hashMod(n, size_node(t))))
 #define hashInt(t, i) hashPow2(t, i)
 #define hashNumber(t, n) (getNode(t, ((n) % ((size_node(t)-1) | 1))))
@@ -103,8 +106,19 @@ const as_Value *asT_getInt(as_Table *t, as_Integer key) {
 
 const as_Value *asT_getShortStr(as_Table *t, const char *key) {
 
-
-
+    as_Node *n = hashString(t, ELFhash(key));
+    for (;;) {
+        
+        const as_Value *k = getKey(n);
+        if (typeIsString(k) && asS_equal(cast(as_String*, getValue(k).gc), key)) {
+            return getNodeValue(n);
+        }
+        int offset = getNodeNext(n);
+        if (offset == 0) break;
+        n += offset;
+    }
+    
+    return as_Nil;
 }
 
 
