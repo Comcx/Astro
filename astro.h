@@ -69,6 +69,7 @@ typedef AS_UNSIGNED as_Unsigned;
 typedef AS_BYTE     as_Byte;
 
 
+typedef int (*as_CFunction) (as_State *S);
 
 
 //void *as_Alloc(void *ptr, size_t size_object, size_t size_new, size_t num);

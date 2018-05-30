@@ -42,7 +42,7 @@
 #define BIT_ISCOLLECTABLE (1 << 6)
 #define setCollectable(t) ((t) | BIT_ISCOLLECTABLE)
 #define ctb(t) setCollectable(t)
-
+#define isCollectable(t) (getTypeRaw(t) & BIT_ISCOLLECTABLE)
 
 
 
@@ -66,6 +66,7 @@ typedef struct as_Value {
         as_Integer b;
         as_Integer i;
         as_Number n;
+        as_CFunction *f;
         void *p;
 
     }val;
@@ -114,9 +115,10 @@ typedef struct as_Value {
 #define fltValue(obj)  (getValue(obj).n)
 #define strValue(obj)  (getstr(getValue(obj).gc))
 #define boolValue(obj) (getValue(obj).b)
+#define cfValue(obj) (getValue(obj).f)
 #define tableValue(obj) (obj)
 #define clValue(obj) (obj)
-
+#define gcValue(obj) (as_assert(isCollectable(obj)), getValue(obj).gc)
 
 
 
@@ -157,10 +159,16 @@ typedef struct as_Table {
 
     GCObject *gclist;
     as_Unsigned size_array; /*array size*/
-    as_Unsigned size_dict;  /*dict key size*/
+    as_Unsigned size_dict;  /*dict key size, := log2(actual numerial size of node)*/
 
 }as_Table;
                                
+
+#define hashMod(s, size) (as_assert((size) & ((size)-1) == 0), (cast(int, (s) & ((size-1)))))
+
+#define pow2(n) (1 << n)
+#define size_node(t) (pow2((t)->size_dict))
+
 
 
 

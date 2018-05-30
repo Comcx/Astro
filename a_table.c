@@ -7,18 +7,13 @@
 #include "a_debug.h"
 
 
+#define hashPow2(t, n) (getNode(t, hashMod(n, size_node(t))))
+#define hashInt(t, i) hashPow2(t, i)
+#define hashNumber(t, n) (getNode(t, ((n) % ((size_node(t)-1) | 1))))
+#define hashString(t, s) hashPow2(t, s)
+#define hashBool(t, b) hashPow2(t, b)
+#define hashPointer(t, p) hashNumber(t, cast(unsigned int, p))
 
-int hashString(const char *str) {
-
-    
-
-}
-
-
-int hashInt(as_Integer i) {
-
-
-}
 
 
 as_Table *asT_new(as_State *S, int flag_array, int flag_dict, int size_array, int size_dict) {
@@ -46,6 +41,37 @@ as_Table *asT_new(as_State *S, int flag_array, int flag_dict, int size_array, in
 
 
     return t;
+}
+
+
+
+
+
+
+static as_Node *getBarrel(const as_Table *t, const as_Value *key) {
+
+    switch (getTypeWithVar(key)) {
+    
+        case AS_TNUMINT:
+            return hashInt(t, intValue(key));
+        case AS_TNUMFLT:
+            return hashNumber(t, (int)fltValue(key));
+        case AS_TSHTSTR:
+            return hashString(t, ELFhash(strValue(key)));
+        case AS_TLNGSTR:
+            printf("long str function of getBarrel not finished!");
+            exit(-1);
+            break;  /*unfinsihed!*/
+        case AS_TBOOLEAN:
+            return hashBool(t, boolValue(key));
+        case AS_TACF:
+            return hashPointer(t, cfValue(key));
+        default: {
+            
+            return hashPointer(t, gcValue(key));
+        }
+    }
+
 }
 
 
