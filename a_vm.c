@@ -13,7 +13,7 @@
 
 
 
-int asV_objectEqual(as_Value *v1, as_Value *v2) {
+int asV_objectEqual(const as_Value *v1, const as_Value *v2) {
 
     if (getTypeWithVar(v1) != getTypeWithVar(v2)) {
         if(getTypeNoVar(v1) != getTypeNoVar(v2) || getTypeNoVar(v1) != AS_TNUMBER)

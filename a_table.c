@@ -4,6 +4,7 @@
 #include "a_mem.h"
 #include "a_object.h"
 #include "a_string.h"
+#include "a_vm.h"
 #include "a_debug.h"
 
 
@@ -48,8 +49,22 @@ as_Table *asT_new(as_State *S, int flag_array, int flag_dict, int size_array, in
 
 
 
+as_Table *asT_free(as_State *S, as_Table *t) {
+
+    if (t != NULL) {
+        
+        asM_free(S, t->array);
+        asM_free(S, t->node);
+    }
+    
+    return asM_free(S, t);
+}
 
 
+
+/*
+** get main position(barrel) of node in dict
+*/
 
 static as_Node *getBarrel(const as_Table *t, const as_Value *key) {
 
@@ -79,6 +94,9 @@ static as_Node *getBarrel(const as_Table *t, const as_Value *key) {
 
 
 
+/*
+** search function for integers
+*/
 const as_Value *asT_getInt(as_Table *t, as_Integer key) {
 
     if (t->flag_array && cast(as_Unsigned, key) < t->size_array) {
@@ -104,6 +122,9 @@ const as_Value *asT_getInt(as_Table *t, as_Integer key) {
 }
 
 
+/*
+** search function for short strings
+*/
 const as_Value *asT_getShortStr(as_Table *t, const char *key) {
 
     as_Node *n = hashString(t, ELFhash(key));
@@ -122,11 +143,27 @@ const as_Value *asT_getShortStr(as_Table *t, const char *key) {
 }
 
 
+
+/*
+** "Generic" get version. (Not that generic: not valid for integers,
+** which may be in array part, nor for floats with integral values.)
+*/
 const as_Value *asT_getGeneric(as_Table *t, as_Value *key) {
 
-
-
+    as_Node *n = getBarrel(t, key);
+    for (;;) {    /*search in chain*/
+    
+        if (asV_objectEqual(getKey(n), key)) {
+            return getNodeValue(n);
+        }
+        int offset = getNodeNext(n);
+        if (offset == 0) break;
+        n += offset;
+    }
+    
+    return as_Nil;
 }
+
 
 
 const as_Value *asT_get(as_Table *t, as_Value *key) {

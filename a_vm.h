@@ -11,7 +11,7 @@
 #include "a_debug.h"
 
 
-int asV_objectEqual(as_Value *v1, as_Value *v2);
+int asV_objectEqual(const as_Value *v1, const as_Value *v2);
 void asV_execute(as_State *S);
 
 
