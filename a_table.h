@@ -14,6 +14,10 @@
 #define getKey(n) (cast(const as_Value*, (&(n->key.val))))
 #define getNodeNext(n) ((n)->key.next)
 
+#define setNodeKey(S, key, obj) \
+        {as_Key *k = (key); const as_Value *o = (obj); \
+         k->val = *o; }
+
 
 
 as_Table *asT_new(as_State *S, int flag_array, int flag_dict, int size_array, int size_dict);
@@ -22,7 +26,7 @@ as_Table *asT_new(as_State *S, int flag_array, int flag_dict, int size_array, in
 #define asT_newDict(S, size_dict) asT_new(S, 0, 1, 0, size_dict)
 #define asT_newTable(S, size_array, size_dict) asT_new(S, 1, 1, size_array, size_dict)
 
-
+as_Value *asT_newKey(as_State *S, as_Table *t, const as_Value *key);
 const as_Value *asT_get(as_Table *t, as_Value *key);
 as_Value *asT_set(as_State *S, as_Table *t, as_Value *key);
 

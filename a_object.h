@@ -81,6 +81,7 @@ typedef struct as_Value {
 #define getTypeWithVar(o) (getTypeRaw(o) & 0x3F)
 #define getTypeNoVar(o) (removeVar(getTypeRaw(o)))
 
+#define typeIsNil(o) (getTypeWithVar(o) == AS_TNIL)
 #define typeIsInteger(o) (getTypeWithVar(o) == AS_TNUMINT)
 #define typeIsNumber(o) (getTypeWithVar(o) == AS_TNUMBER)
 #define typeIsBoolean(o) (getTypeNoVar(o) == AS_TBOOLEAN)

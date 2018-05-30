@@ -19,6 +19,14 @@
 #define hashPointer(t, p) hashNumber(t, pointer2uint(p))
 
 
+static void tableError(as_State *S, as_Table *t, const char *msg) {
+
+    printf("table error! %s\n", msg);
+    exit(-1);
+}
+
+
+
 
 as_Table *asT_new(as_State *S, int flag_array, int flag_dict, int size_array, int size_dict) {
     
@@ -91,6 +99,39 @@ static as_Node *getBarrel(const as_Table *t, const as_Value *key) {
     }
 
 }
+
+
+
+/*
+** inserts a new key into a hash table; first, check whether key's main
+** position is free. If not, check whether colliding node is in its main
+** position or not: if it is not, move colliding node to an empty place and
+** put new key in its main position; otherwise (colliding node is in its main
+** position), new key goes to an empty position.
+*/
+as_Value *asT_newKey(as_State *S, as_Table *t, const as_Value *key) {
+
+    if (typeIsNil(key)) tableError(S, t, "table can not be nil.");
+    else if (typeIsNumber(key)) {
+        tableError(S, t, "table can not be float.");
+        /*unfinsihed!*/
+    }
+
+    as_Node *n = getBarrel(t, key);
+    if (!typeIsNil(getKey(n))) {    /*found node is not free*/
+    
+        /*unfinished*/
+    }
+    
+    /*found node is free*/
+    setNodeKey(S, &n->key, key);
+    return getNodeValue(n);
+}
+
+
+
+
+
 
 
 
