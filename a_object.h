@@ -165,7 +165,7 @@ typedef struct as_Table {
 }as_Table;
                                
 
-#define hashMod(s, size) (/*as_assert((size) & ((size)-1) == 0), */(cast(int, (s) & ((size-1)))))
+#define hashMod(s, size) (as_assert(((size) & ((size)-1)) == 0), (cast(int, (s) & ((size-1)))))
 
 #define pow2(n) (1 << (n))
 #define size_node(t) (pow2((t)->size_dict))

@@ -48,12 +48,14 @@ int main(int argc, char *argv[]) {
 
     //cl = asM_free(S, cl);
 
-    as_Table *t = asT_newTable(S, 5, 0);
+    as_Table *t = asT_newTable(S, 5, 1);
     
     as_Value key;
     setString(S, &key, str);
     //printf("test: %s", strValue(&key));
     as_Value *n = asT_set(S, t, &key);
+
+    //as_assert((1 << 1) & );
 
     t = asT_free(S, t);
 
