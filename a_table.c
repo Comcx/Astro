@@ -51,8 +51,8 @@ as_Table *asT_new(as_State *S, int flag_array, int flag_dict, int size_array, in
         }
     }
 
-    t->lastFree = size_dict > 0 ? t->node + size_dict - 1 : NULL;
-//printf("sixe: %d\n", t->size_dict);
+    t->lastFree = size_dict > 0 ? t->node + pow2(size_dict) - 1 : NULL;
+//printf("sixe: %x\n", t->lastFree);
     return t;
 }
 
@@ -109,6 +109,7 @@ static as_Node *getFreeBarrel(as_Table *t) {
 
         while (t->lastFree > t->node) {
             t->lastFree--;
+            //printf("\nlastFree change: %x\n", t->lastFree);
             if (typeIsNil(getKey(t->lastFree)))
                 return t->lastFree;
         }
@@ -292,7 +293,7 @@ as_Value *asT_set(as_State *S, as_Table *t, as_Value *key) {
 
 void debug_Table(as_Table *t) {
 
-    if (t->flag_array && t->flag_dict) {
+    if (t->flag_array) {
     
         printf("\n-> array part:\n");
         int i = 0;
@@ -301,29 +302,20 @@ void debug_Table(as_Table *t) {
             printObject(t->array + i);
             printf("\n");
         }
-
-        printf("\n-> dict part:\n");
-        for (i = 0; i < t->size_dict; i++) {
-
-            printf("under working...");
-        }
-
-
-    } else if (t->flag_array) {
-
-        printf("\n-> array:\n");
-        int i = 0;
-        for (; i < t->size_array; i++) {
-
-            printObject(t->array + i);
-            printf("\n");
-        }
     
-    } else if (t->flag_dict) {
-
-        
     }
 
+    if (t->flag_dict) {
+        
+        int i;
+        printf("\n-> dict part:\n");
+        //printf("lastFree: %x\n", t->lastFree);
+        for (i = 0; i < pow2(t->size_dict); i++) {
+
+            printObject(&t->node[i].val);
+            printf("\n");
+        }
+    }
 
 }
 

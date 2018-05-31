@@ -3,6 +3,7 @@
 #include "astro.h"
 #include "a_string.h"
 #include "a_object.h"
+#include "a_debug.h"
 #include "a_mem.h"
 #include <stdio.h>
 
@@ -91,14 +92,14 @@ as_String *asS_freeString(as_State *S, as_String *str) {
         strt->hash[hash] = str->hnext;
     } else {
 
-        as_String *p = strt->hash[hash]->hnext;
+        as_String *p = strt->hash[hash];
         while (p && p->hnext != str) {
 
             p = p->hnext;
         }
 
         if (p == NULL) {
-            //assert(0);
+            as_assert(0);
         }
         /*found node before str*/
         p->hnext = str->hnext;

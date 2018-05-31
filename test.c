@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
     as_State *S = asE_newState();
     //test = asM_malloc(S, sizeof(struct Test));
     
-    as_String *str = asS_newString(S, "ENV");
+    as_String *str = asS_newString(S, "Christina");
 
     //str = asS_freeString(S, str);
     
@@ -48,17 +48,21 @@ int main(int argc, char *argv[]) {
 
     //cl = asM_free(S, cl);
 
-    as_Table *t = asT_newTable(S, 5, 1);
+    as_Table *t = asT_newTable(S, 5, 3);
     
     as_Value key;
     setString(S, &key, str);
+
     //printf("test: %s", strValue(&key));
     as_Value *n = asT_set(S, t, &key);
+    *n = key;
 
-    //as_assert((1 << 1) & );
+    
+    debug_Table(t);
+
 
     t = asT_free(S, t);
-
+    str = asS_freeString(S, str);
 
     fclose(file);
 
