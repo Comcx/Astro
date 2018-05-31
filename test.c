@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
     
     as_String *str = asS_newString(S, "ENV");
 
-    str = asS_freeString(S, str);
+    //str = asS_freeString(S, str);
     
     
     FILE *file;
@@ -48,8 +48,14 @@ int main(int argc, char *argv[]) {
 
     //cl = asM_free(S, cl);
 
+    as_Table *t = asT_newTable(S, 5, 0);
+    
+    as_Value key;
+    setString(S, &key, str);
+    //printf("test: %s", strValue(&key));
+    as_Value *n = asT_set(S, t, &key);
 
-
+    t = asT_free(S, t);
 
 
     fclose(file);

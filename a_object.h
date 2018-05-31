@@ -98,11 +98,11 @@ typedef struct as_Value {
     {as_Value *o_ = (o); getValue(o_).b = x; setType(o_, AS_TBOOLEAN);}
 
 #define setGC(S, o, g) \
-    {as_Value *o_ = o; GCObject *g_ = g; \
+    {as_Value *o_ = (o); GCObject *g_ = (g); \
      getValue(o_).gc = g_; setType(o_, ctb(g_->type));}
 
 #define setString(S, o, s) \
-    {as_Value *o_ = o; as_String *s_ = s; \
+    {as_Value *o_ = (o); as_String *s_ = (s); \
      getValue(o_).gc = cast(GCObject*, s_); setType(o_, AS_TSTRING);}
 
 
@@ -156,7 +156,7 @@ typedef struct as_Table {
 
     as_Value *array;/*array ptr*/
     as_Node *node;  /*dict ptr*/
-    //char *str;      /*string ptr*/
+    as_Node *lastFree;
 
     GCObject *gclist;
     as_Unsigned size_array; /*array size*/
@@ -165,9 +165,9 @@ typedef struct as_Table {
 }as_Table;
                                
 
-#define hashMod(s, size) (as_assert((size) & ((size)-1) == 0), (cast(int, (s) & ((size-1)))))
+#define hashMod(s, size) (/*as_assert((size) & ((size)-1) == 0), */(cast(int, (s) & ((size-1)))))
 
-#define pow2(n) (1 << n)
+#define pow2(n) (1 << (n))
 #define size_node(t) (pow2((t)->size_dict))
 
 

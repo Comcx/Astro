@@ -1,5 +1,5 @@
 
-
+#include <math.h>
 #include "a_table.h"
 #include "a_mem.h"
 #include "a_object.h"
@@ -37,21 +37,22 @@ as_Table *asT_new(as_State *S, int flag_array, int flag_dict, int size_array, in
     t->size_array = size_array;
     t->size_dict = size_dict;
 
-    if (flag_array && flag_dict) {
+    if (flag_array) {
 
         t->array = asM_newVector(S, size_array, as_Value);
-        t->node = asM_newVector(S, size_dict, as_Node);
-    } else if (flag_array) {
+    } 
+    if (flag_dict) {
 
-        t->array = asM_newVector(S, size_array, as_Value);
-    } else if (flag_dict) {
-
-        t->node = asM_newVector(S, size_dict, as_Node);
-    } else {
-        as_assert(0);
+        t->node = asM_newVector(S, pow2(size_dict), as_Node);
+        int i = 0;
+        for (; i < size_dict; i++) {
+            setNodeKey(S, &(t->node[i].key), as_Nil);
+            t->node[i].key.next = 0;
+        }
     }
 
-
+    t->lastFree = size_dict > 0 ? t->node + size_dict - 1 : NULL;
+//printf("sixe: %d\n", t->size_dict);
     return t;
 }
 
@@ -61,8 +62,8 @@ as_Table *asT_free(as_State *S, as_Table *t) {
 
     if (t != NULL) {
         
-        asM_free(S, t->array);
-        asM_free(S, t->node);
+        if (t->size_array) asM_free(S, t->array);
+        if (t->flag_dict) asM_free(S, t->node);
     }
     
     return asM_free(S, t);
@@ -102,6 +103,23 @@ static as_Node *getBarrel(const as_Table *t, const as_Value *key) {
 
 
 
+static as_Node *getFreeBarrel(as_Table *t) {
+
+    if (t->lastFree != NULL) {
+
+        while (t->lastFree > t->node) {
+            t->lastFree--;
+            if (typeIsNil(getKey(t->lastFree)))
+                return t->lastFree;
+        }
+    }
+    
+    return NULL;
+}
+
+
+
+
 /*
 ** inserts a new key into a hash table; first, check whether key's main
 ** position is free. If not, check whether colliding node is in its main
@@ -111,19 +129,52 @@ static as_Node *getBarrel(const as_Table *t, const as_Value *key) {
 */
 as_Value *asT_newKey(as_State *S, as_Table *t, const as_Value *key) {
 
-    if (typeIsNil(key)) tableError(S, t, "table can not be nil.");
+    if (typeIsNil(key)) tableError(S, t, "table index can not be nil.");
     else if (typeIsNumber(key)) {
-        tableError(S, t, "table can not be float.");
+        tableError(S, t, "table index can not be float.");
         /*unfinsihed!*/
     }
 
+//printf("\nsii: %d\n", hashMod(ELFhash(key), size_node(t)));
     as_Node *n = getBarrel(t, key);
     if (!typeIsNil(getKey(n))) {    /*found node is not free*/
     
-        /*unfinished*/
+        as_Node *n_free = getFreeBarrel(t);
+        if (n_free == NULL) {   /*node is full, need to grow table*/
+            
+            tableError(S, t, "table rehash function can not be used!");
+            /*unfinished!*/
+            n = getBarrel(t, key);
+            n_free = getFreeBarrel(t);
+        }
+        as_Node *n_other = getBarrel(t, getKey(n));
+        if (n_other != n) { /*colliding node is not in its barrel*/
+        
+            while (n_other + getNodeNext(n_other) != n) {   /*find pre-node*/
+                n_other += getNodeNext(n_other);
+            }
+            getNodeNext(n_other) = cast(int, n_free - n_other);
+            *n_free = *n;   /*copy that*/
+            if (getNodeNext(n) != 0) {
+
+                getNodeNext(n_free) += cast(int, n - n_free);
+                getNodeNext(n) = 0; /*n is free now*/
+            }
+            setNil(getNodeValue(n));
+
+        } else {    /*colliding node is in its barrel, move node to free spaces*/
+            
+            if (getNodeNext(n) != 0) {
+                getNodeNext(n_free) = cast(int, (n+getNodeNext(n)) - n_free);
+            }
+            getNodeNext(n) = cast(int, n_free - n);
+            n = n_free;
+        }
+
     }
     
-    /*found node is free*/
+    /*found node is free now*/
+    //n->key.val = *key;exit(-1);
     setNodeKey(S, &n->key, key);
     return getNodeValue(n);
 }
@@ -167,7 +218,7 @@ const as_Value *asT_getInt(as_Table *t, as_Integer key) {
 ** search function for short strings
 */
 const as_Value *asT_getShortStr(as_Table *t, const char *key) {
-
+//printf("testt %d\n", t->size_dict); exit(-1);
     as_Node *n = hashString(t, ELFhash(key));
     for (;;) {
         
@@ -231,10 +282,10 @@ const as_Value *asT_get(as_Table *t, as_Value *key) {
 as_Value *asT_set(as_State *S, as_Table *t, as_Value *key) {
 
     const as_Value *ans = asT_get(t, key);
-    if (ans != as_Nil ) {
+    if (ans != as_Nil ) {   /*already exit*/
         return cast(as_Value*, ans);
     }
-    else return cast(as_Value*, as_Nil);
+    else return asT_newKey(S, t, key);
 }
 
 
